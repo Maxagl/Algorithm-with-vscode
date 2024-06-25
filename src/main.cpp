@@ -5,13 +5,14 @@ void showVectorString(vector<string> ans);
 void showVectorInt(vector<int> ans);
 void showInt(int num);
 void showString(string str);
+void showVectorVectorInt(vector<vector<int>> ans);
 
 int main()
 {
-    letter_Combination_Of_A_Phone algorithmInstance{};
-    string digits{"23"};
-    vector<string> ans = algorithmInstance.letterCombinations(digits);
-    showVectorString(ans);
+    CombinationSum algorithmInstance{};
+    vector<int> candidates = {2,3,6,7};
+    vector<vector<int>> ans = algorithmInstance.combinationSum(candidates, 7);
+    showVectorVectorInt(ans);
     return 0;
 }
 
@@ -21,7 +22,15 @@ void showVectorString(vector<string> ans)
 }
 void showVectorInt(vector<int> ans)
 {
-    for(int num : ans) std::cout << num <<", " << std::endl; 
+    for(int num : ans) std::cout << num <<", "; 
+}
+void showVectorVectorInt(vector<vector<int>> ans)
+{
+    for(auto v : ans)
+    {
+        showVectorInt(v);
+        std::cout <<" " << std::endl;
+    }
 }
 void showInt(int num)
 {
