@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(algorithms)
+
+set(SOURCES src/algorithms.cpp src/main.cpp)
+add_executable(algorithms ${SOURCES})
+
+target_include_directories(algorithms PRIVATE ${PROJECT_SOURCE_DIR}/include)
