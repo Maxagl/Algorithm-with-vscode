@@ -24,3 +24,17 @@ public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target);
     void backTracking(vector<int>& candidates, int target, int index, vector<vector<int>>& ans, vector<int>& temp, int sum);
 };
+
+class Permutations
+{
+public:
+    vector<vector<int>> permute(vector<int>& nums);
+    void backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp, unordered_map<int, bool>& visited);
+};
+
+class Subsets
+{
+public:
+    vector<vector<int>> subsets(vector<int>& nums);
+    void backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp);
+};

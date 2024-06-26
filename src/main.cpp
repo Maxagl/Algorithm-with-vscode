@@ -9,9 +9,9 @@ void showVectorVectorInt(vector<vector<int>> ans);
 
 int main()
 {
-    CombinationSum algorithmInstance{};
-    vector<int> candidates = {2,3,6,7};
-    vector<vector<int>> ans = algorithmInstance.combinationSum(candidates, 7);
+    Permutations algorithmInstance{};
+    vector<int> candidates = {1,2,3};
+    vector<vector<int>> ans = algorithmInstance.permute(candidates);
     showVectorVectorInt(ans);
     return 0;
 }

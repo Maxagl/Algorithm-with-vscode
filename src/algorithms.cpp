@@ -87,3 +87,36 @@ void CombinationSum::backTracking(vector<int>& candidates, int target, int index
         temp.pop_back();
     }
 }
+
+/*--------------------------46--------------------------*/
+vector<vector<int>> Permutations::permute(vector<int>& nums)
+{
+    vector<vector<int>> ans{};
+    vector<int> temp{};
+    unordered_map<int, bool> visited{};
+    for(int num : nums)
+    {
+        visited[num] = false;
+    }
+    backTracking(ans, nums, temp, visited);
+    return ans;
+}
+void Permutations::backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp, unordered_map<int, bool>& visited)
+{
+    if(temp.size() == nums.size())
+    {
+        ans.push_back(temp);
+        return;
+    }
+    for(int i{0}; i < nums.size(); ++i)
+    {
+        if(!visited[nums[i]])
+        {
+            temp.push_back(nums[i]);
+            visited[nums[i]] = true;
+            backTracking(ans, nums, temp, visited);
+            temp.pop_back();
+            visited[nums[i]] = false;
+        }
+    }
+}
