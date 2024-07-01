@@ -3,6 +3,7 @@
 #include <string>
 
 using namespace std;
+const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
 class letter_Combination_Of_A_Phone
 {
@@ -36,5 +37,12 @@ class Subsets
 {
 public:
     vector<vector<int>> subsets(vector<int>& nums);
-    void backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp);
+    void backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp, int index);
+};
+
+class WordSearch
+{
+public:
+    bool exist(vector<vector<char>>& board, string word);
+    void backTracking(vector<vector<char>>& board, const string& word, bool& ans, int index, int col, int row);
 };

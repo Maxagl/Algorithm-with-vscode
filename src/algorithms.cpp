@@ -120,3 +120,69 @@ void Permutations::backTracking(vector<vector<int>>& ans, vector<int>& nums, vec
         }
     }
 }
+
+/*--------------------------78--------------------------*/
+vector<vector<int>> Subsets::subsets(vector<int>& nums)
+{
+    vector<vector<int>> ans{};
+    vector<int> temp{};
+    backTracking(ans, nums, temp, 0);
+    return ans;
+}
+void Subsets::backTracking(vector<vector<int>>& ans, vector<int>& nums, vector<int>& temp, int index)
+{
+    // 为什么可以不用等到index==nums.size()
+    // 因为我不取后，i不会更新
+    // 这里的理解是，递归的上一层的总是会单独形成一份子集。而我这一层只需要考虑取哪一个
+    ans.push_back(temp);
+    for(int i{index}; i < nums.size(); ++i)
+    {
+        temp.push_back(nums[i]);
+        backTracking(ans, nums, temp, i + 1);
+        temp.pop_back();
+    }
+}
+/*--------------------------79--------------------------*/
+bool WordSearch::exist(vector<vector<char>>& board, string word)
+{
+    int m = board.size();
+    int n = board[0].size();
+    // visited矩阵好像可以去掉
+    // vector<vector<int>> visited(m, vector<int>(n, 0));
+    bool ans{false};
+    for(int i{0}; i < m; ++i)
+    {
+        for(int j{0}; j < n; ++j)
+        {
+            if(board[i][j] == word[0])
+            {
+                char ch = board[i][j];
+                board[i][j] = '*';
+                backTracking(board, word, ans, 1, j, i);
+                board[i][j] = ch;
+            }
+        }
+    }
+    return ans;  
+}
+// 以后写函数，记得row在前面，这里就算了别改了
+void WordSearch::backTracking(vector<vector<char>>& board, const string& word, bool& ans, int index, int col, int row)
+{
+    if(index == word.size())
+    {
+        ans = true;
+        return;
+    } 
+    for(int i{0}; i < 4; ++i)
+    {
+        int nextRow = row + DIR4[i][0];
+        int nextCol = col + DIR4[i][1];
+        if(nextRow >= 0 && nextRow < board.size() && nextCol >= 0 && nextCol < board[0].size() && board[nextRow][nextCol] == word[index])
+        {
+                char ch = board[nextRow][nextCol];
+                board[nextRow][nextCol] = '*';
+                backTracking(board, word, ans, index + 1, nextCol, nextRow);
+                board[nextRow][nextCol] = ch;
+        }
+    }
+}

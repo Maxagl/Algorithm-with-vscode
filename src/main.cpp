@@ -9,9 +9,9 @@ void showVectorVectorInt(vector<vector<int>> ans);
 
 int main()
 {
-    Permutations algorithmInstance{};
+    Subsets algorithmInstance{};
     vector<int> candidates = {1,2,3};
-    vector<vector<int>> ans = algorithmInstance.permute(candidates);
+    vector<vector<int>> ans = algorithmInstance.subsets(candidates);
     showVectorVectorInt(ans);
     return 0;
 }
