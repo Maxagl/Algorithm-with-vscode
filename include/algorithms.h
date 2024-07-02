@@ -51,8 +51,9 @@ class PalindromePartition
 {
 private:
     vector<vector<int>> f{};
-    vector<vector<string>> ans{};
+    vector<vector<string>> ret{};
     vector<string> ans{};
+    int n{};
 
 public:
     vector<vector<string>> partition(string s);
