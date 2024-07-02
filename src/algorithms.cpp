@@ -186,3 +186,38 @@ void WordSearch::backTracking(vector<vector<char>>& board, const string& word, b
         }
     }
 }
+
+vector<vector<string>> PalindromePartition::partition(string s)
+{
+    n = s.size();
+    f.assign(n, vector<int>(n, true));
+    // 记录回文串
+    for(int i{n - 1}; i >= 0; --i)
+    {
+        for(int j = i + 1; j < n; ++j)
+        {
+            f[i][j] = (s[i] == s[j]) && f[i + 1][j - 1];
+        }
+    }
+    backTracking(s, 0);
+    return ret;
+}
+// 真正的分割
+void PalindromePartition::backTracking(const string& s, int i)
+{
+    if(i == n)
+    {
+        ret.push_back(ans);
+        return;
+    }
+    // 这里还没真正理解
+    for(int j{i}; j < n; ++j)
+    {
+        if(f[i][j])
+        {
+            ans.push_back(s.substr(i, j - i + 1));
+            backTracking(s, j + 1);
+            ans.pop_back();
+        }
+    }
+}

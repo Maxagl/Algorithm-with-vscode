@@ -46,3 +46,16 @@ public:
     bool exist(vector<vector<char>>& board, string word);
     void backTracking(vector<vector<char>>& board, const string& word, bool& ans, int index, int col, int row);
 };
+
+class PalindromePartition
+{
+private:
+    vector<vector<int>> f{};
+    vector<vector<string>> ans{};
+    vector<string> ans{};
+
+public:
+    vector<vector<string>> partition(string s);
+    void backTracking(const string& s, int i);
+
+};
