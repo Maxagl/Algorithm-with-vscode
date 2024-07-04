@@ -187,6 +187,7 @@ void WordSearch::backTracking(vector<vector<char>>& board, const string& word, b
     }
 }
 
+/*--------------------------131--------------------------*/
 vector<vector<string>> PalindromePartition::partition(string s)
 {
     n = s.size();
@@ -210,9 +211,10 @@ void PalindromePartition::backTracking(const string& s, int i)
         ret.push_back(ans);
         return;
     }
-    // 这里还没真正理解
+    // 分割完的字符不能在利用了，因为是一次性分割。不是子集的回文串个数
     for(int j{i}; j < n; ++j)
     {
+        // 当前j的位置分割完后，看后续还有没有能分割的位置
         if(f[i][j])
         {
             ans.push_back(s.substr(i, j - i + 1));
