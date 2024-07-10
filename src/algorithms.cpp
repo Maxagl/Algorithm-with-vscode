@@ -223,3 +223,80 @@ void PalindromePartition::backTracking(const string& s, int i)
         }
     }
 }
+
+/*--------------------------4--------------------------*/
+double MedianOfTwoSortedArray::findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
+{
+    int n1 = nums1.size();
+    int n2 = nums2.size();
+    if(n1 > n2) return findMedianSortedArrays(nums2, nums1);
+
+    int n = n1 + n2;
+    int left = (n1 + n2 + 1) / 2;
+    int low = 0;
+    int high = n1;
+    
+    while(low <= high)
+    {
+        int mid1 = (low + high) >> 1;
+        int mid2 = left - mid1;
+
+        int l1 = INT_MIN;
+        int l2 = INT_MIN;
+        int r1 = INT_MAX;
+        int r2 = INT_MAX;
+
+        if(mid1 < n1) r1 = nums1[mid1];
+        if(mid2 < n2) r2 = nums2[mid2];
+        if(mid1 - 1 >= 0) l1 = nums1[mid1 - 1];
+        if(mid2 - 1 >= 0) l2 = nums2[mid2 - 1];
+
+        if(l1 <= r2 && l2 <= r1)
+        {
+        // 不懂为什么是比l1,l2。明明这里有四个数，不应该取中间的吗
+            if(n % 2 == 1) return max(l1, l2);
+            else return ((double)(max(l1 ,l2) + min(r1, r2))) / 2.0;
+        }
+        // 这两个条件就是二分
+        else if(l1 > r2)
+        {
+            high = mid1 - 1;
+        }
+        else
+        {
+            low = mid1 + 1;
+        }
+    }
+    return 0;
+}
+
+/*--------------------------33--------------------------*/
+int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
+{
+    int n = nums.size();
+    int left{0};
+    int right{n - 1};
+
+    while(right > left)
+    {
+        int mid = left + (right - left) / 2;
+        // 我担心的情况就是陷入局部递增，但只要旋转了，第一次的取中间就不可能陷入局部递增。
+        // 因为只会动一边，如果落在左边的局部递增。左边加，右边不变。还是能找到轴
+        // 如果落在右边的局部递增。右边就保持在右边的局部递增，左边不变
+        // 这就会变成，left和right永远都在左边的局部递增和右边的局部递增
+        if(nums[mid] < nums[right]) left = mid + 1;
+        else right = mid;
+    }
+    int rot = left;
+    left = 0;
+    right = n - 1;
+    while(right >= left)
+    {
+        int mid = left + (right - left) / 2;
+        int realMid = (mid + rot) % n;
+        if(nums[realMid] == target) return realMid;
+        if(nums[realMid] < target) left = mid + 1;
+        else right = mid - 1; 
+    }
+    return - 1;
+}

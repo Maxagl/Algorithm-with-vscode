@@ -60,3 +60,15 @@ public:
     void backTracking(const string& s, int i);
 
 };
+
+class MedianOfTwoSortedArray
+{
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2);
+};
+
+class SearchInRotatedSortedArray
+{
+public:
+    int search(vector<int>& nums, int target);
+};

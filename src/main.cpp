@@ -9,10 +9,10 @@ void showVectorVectorInt(vector<vector<int>> ans);
 
 int main()
 {
-    Subsets algorithmInstance{};
-    vector<int> candidates = {1,2,3};
-    vector<vector<int>> ans = algorithmInstance.subsets(candidates);
-    showVectorVectorInt(ans);
+    SearchInRotatedSortedArray algorithmInstance{};
+    vector<int> candidates = {4,5,6,7,0,1,2};
+    int ans = algorithmInstance.search(candidates, 0);
+    showInt(ans);
     return 0;
 }
 
