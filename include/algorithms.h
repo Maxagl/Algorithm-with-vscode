@@ -72,3 +72,9 @@ class SearchInRotatedSortedArray
 public:
     int search(vector<int>& nums, int target);
 };
+
+class FindFirstAndLastPositionOfElementInSortedArray
+{
+public:
+    vector<int> searchRange(vector<int>& nums, int target);
+};

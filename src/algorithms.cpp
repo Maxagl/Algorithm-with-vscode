@@ -277,6 +277,7 @@ int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
     int left{0};
     int right{n - 1};
 
+    // 这里等于跳出来是因为会陷入无限循环，内部没有返回。
     while(right > left)
     {
         int mid = left + (right - left) / 2;
@@ -284,12 +285,13 @@ int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
         // 因为只会动一边，如果落在左边的局部递增。左边加，右边不变。还是能找到轴
         // 如果落在右边的局部递增。右边就保持在右边的局部递增，左边不变
         // 这就会变成，left和right永远都在左边的局部递增和右边的局部递增
-        if(nums[mid] < nums[right]) left = mid + 1;
+        if(nums[mid] > nums[right]) left = mid + 1;
         else right = mid;
     }
     int rot = left;
     left = 0;
     right = n - 1;
+    // 这里又要大于等于。因为那个数可能刚好是答案，但我们跳出来了
     while(right >= left)
     {
         int mid = left + (right - left) / 2;
@@ -299,4 +301,62 @@ int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
         else right = mid - 1; 
     }
     return - 1;
+}
+
+/*--------------------------34--------------------------*/
+vector<int> FindFirstAndLastPositionOfElementInSortedArray::searchRange(vector<int>& nums, int target)
+{
+    int n = nums.size();
+    int l{0};
+    int r{n - 1};
+    vector<int> ans(2, -1);
+    while(r >= l)
+    {
+        int mid = l + (r - l) / 2;
+        // 从左边往右边加，l最终变成最右边
+        // 反过来是不是也可以
+        if(nums[mid] == target)
+        {
+            ans[1] = l;
+            ++l; 
+        }
+        else if(nums[mid] < target) l = mid + 1;
+        else r = mid - 1; 
+    }
+    l = 0;
+    r = n - 1;
+    while(r >= l)
+    {
+        int mid = l + (r - l) / 2;
+        // 从右边往左边减，l最终变成最左边
+        if(nums[mid] == target)
+        {
+            ans[0] = r;
+            --r; 
+        }
+        else if(nums[mid] < target) l = mid + 1;
+        else r = mid - 1; 
+    }
+    return ans;
+ }
+
+ /*--------------------------35--------------------------*/
+
+int SearchInsertPosition::searchInsert(vector<int>& nums, int target)
+{
+    int n = nums.size();
+    int l{0};
+    int r{n - 1};
+    // 内部有返回，需要等于
+    while(r >= l)
+    {
+        int mid = l + (r - l) / 2;
+        if(nums[mid] == target) return mid;
+        if(nums[mid] < target) l = mid + 1;
+        else r = mid - 1;
+    }
+    // 因为最后等于的那一次，肯定l和r相邻。相邻然后变成等于肯定是左边加1
+    // 左边加1就会导致和r碰上。如果这时候r小于target，那么就会进入小的分支，l=mid+1得到答案。
+    // 如果r大于target，那么l不会变，这也是最后一个大于的位置刚好插入
+    return l;
 }
