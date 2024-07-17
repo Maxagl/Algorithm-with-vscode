@@ -360,3 +360,58 @@ int SearchInsertPosition::searchInsert(vector<int>& nums, int target)
     // 如果r大于target，那么l不会变，这也是最后一个大于的位置刚好插入
     return l;
 }
+ /*--------------------------74--------------------------*/
+bool SearchA2DMatrix::searchMatrix(vector<vector<int>>& matrix, int target)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int l{0};
+    int r{m * n - 1};
+    while(r >= l)
+    {
+        int mid = l + (r - l) / 2;
+        // 这里要搞清楚除的意思，n代表一行的个数，也就是列数。
+        int col = mid % n; // 取余的话就代表第几列
+        int row = mid / n; // 取整的话代表第几行
+        if(matrix[row][col] == target) return true;
+        if(matrix[row][col] < target) l = mid + 1;
+        else r = mid - 1;
+    }
+    return false;
+}
+
+ /*--------------------------124--------------------------*/
+
+int BinaryTreeMaximumPathSum::maxGain(TreeNode* root)
+{
+    if(root == nullptr) return 0;
+    // 把左边和右边的加完。然后加在一起。最后判断是否为最大。
+    // 为负数的话那个分值不用考虑了，直接为0就行
+    int leftGain = max(maxGain(root->left), 0);
+    int rightGain = max(maxGain(root->right), 0);
+    // 当这里是叶节点的时候，leftgain和rightgain就是0.得到的就是本身的值
+    int currSum = root->val + leftGain + rightGain;
+    // 更新最大值
+    maxSum = max(maxSum, currSum);
+    // 返回给更高一级的时候，只能从左右选一边不然又有分支了
+    return root->val + max(leftGain, rightGain);
+
+}
+int BinaryTreeMaximumPathSum::maxPathSum(TreeNode* root)
+{
+    maxGain(root);
+    return maxSum;
+}
+
+int FindMinimumInRotatedSortedArray::findMin(vector<int>& nums)
+{
+    int l = 0;
+    int r = nums.size() - 1;
+    while(r > l)
+    {
+        int mid = l + (r - l) / 2;
+        if(nums[mid] > nums[r]) l = mid + 1;
+        else r = mid;
+    }
+    return nums[l];
+}
