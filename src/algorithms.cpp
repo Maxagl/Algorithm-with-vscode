@@ -415,3 +415,75 @@ int FindMinimumInRotatedSortedArray::findMin(vector<int>& nums)
     }
     return nums[l];
 }
+
+
+ /*--------------------------94--------------------------*/
+void BinaryTreeInorderTraversal::dfs(TreeNode* root, vector<int>& ans)
+{
+    if(root == nullptr) return;
+    dfs(root->left, ans);
+    ans.push_back(root->val);
+    dfs(root->right, ans);
+}
+vector<int> BinaryTreeInorderTraversal::inorderTraversal(TreeNode* root)
+{
+    vector<int> ans{};
+    dfs(root, ans);
+    return ans;
+}
+
+ /*--------------------------98--------------------------*/
+// 这种方法的错误之处在于，底层的右边有可能会大于爷爷节点
+// bool ValidateBinarySearchTree::isValidBST(TreeNode* root)
+// {
+//     if(root == nullptr) return true;
+//     if(root->left->val > root->val) return false;
+//     if(root->right->val < root->val) return false;
+//     return isValidBST(root->left) && isValidBST(root->right);
+// }
+
+void ValidateBinarySearchTree::dfs(TreeNode* root, TreeNode*& pre)
+{
+    if(root == nullptr) return;
+    if(root->left != nullptr) dfs(root->left, pre);
+    // 因为pre刚进来，这里root是第一个数的位置了，所以把自己变成pre
+    if(pre == nullptr) pre = root;
+    // binary search tree inorder一定是从小到大排好的。
+    // 这里进入inorder，inorder要和前面一个比。满足的话自己就变成pre
+    else
+    {
+        if(root->val <= pre->val) m_ans = false;
+        pre = root;
+    }
+    if(root->right != nullptr) dfs(root->right, pre);
+}
+
+bool ValidateBinarySearchTree::isValidBST(TreeNode* root)
+{
+    TreeNode* pre = nullptr;
+    dfs(root, pre);
+    return m_ans;
+}
+
+
+ /*--------------------------101--------------------------*/
+bool SymmetricTree::equal(TreeNode* left, TreeNode* right)
+{
+    // 先判断有没有
+    // 两个都是nullptr，证明当前位置是对的
+    if(left == nullptr && right == nullptr) return true;
+    // 有一个不是nullptr， 不是对称
+    else if(left == nullptr || right == nullptr) return false;
+
+    // 有没有之后判断是否相等
+    // 不相等的情况也是不对称
+    if(left->val != right->val) return false;
+    // 这一层判断完了，就到下一层。下一层两个node对应的位置需要思考下
+    // left的left和right的right。left的right和right的left对应
+    return equal(left->left, right->right) && equal(left->right, right->left);
+}
+
+bool SymmetricTree::isSymmetric(TreeNode* root)
+{
+    return equal(root->left, root->right);
+}

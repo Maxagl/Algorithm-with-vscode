@@ -108,3 +108,32 @@ public:
     int maxGain(TreeNode* root);
     int maxPathSum(TreeNode* root);
 };
+
+class FindMinimumInRotatedSortedArray
+{
+public:
+    int findMin(vector<int>& nums);
+};
+
+class BinaryTreeInorderTraversal
+{
+public:
+    void dfs(TreeNode* root, vector<int>& ans);
+    vector<int> inorderTraversal(TreeNode* root);
+};
+
+class ValidateBinarySearchTree
+{
+private:
+    bool m_ans{true};
+public:
+    void dfs(TreeNode* root, TreeNode*& pre);
+    bool isValidBST(TreeNode* root);
+};
+
+class SymmetricTree
+{
+public:
+    bool equal(TreeNode* left, TreeNode* right);
+    bool isSymmetric(TreeNode* root);
+};
