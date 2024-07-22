@@ -33,7 +33,7 @@ void letter_Combination_Of_A_Phone::backTracking(string digits, unordered_map<ch
     }
 }
 
-/*--------------------------22--------------------------*/
+/*--------------------------22--------------------------*/ //没写出来的
 vector<string> GenerateParentheses::generateParenthesis(int n)
 {
     vector<string> ans{};
@@ -187,7 +187,7 @@ void WordSearch::backTracking(vector<vector<char>>& board, const string& word, b
     }
 }
 
-/*--------------------------131--------------------------*/
+/*--------------------------131--------------------------*/  //没写出来的
 vector<vector<string>> PalindromePartition::partition(string s)
 {
     n = s.size();
@@ -224,7 +224,7 @@ void PalindromePartition::backTracking(const string& s, int i)
     }
 }
 
-/*--------------------------4--------------------------*/
+/*--------------------------4--------------------------*/ //没写出来的
 double MedianOfTwoSortedArray::findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
 {
     int n1 = nums1.size();
@@ -270,7 +270,7 @@ double MedianOfTwoSortedArray::findMedianSortedArrays(vector<int>& nums1, vector
     return 0;
 }
 
-/*--------------------------33--------------------------*/
+/*--------------------------33--------------------------*/ //没写出来的
 int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
 {
     int n = nums.size();
@@ -303,7 +303,7 @@ int SearchInRotatedSortedArray::search(vector<int>& nums, int target)
     return - 1;
 }
 
-/*--------------------------34--------------------------*/
+/*--------------------------34--------------------------*/ //没写出来的
 vector<int> FindFirstAndLastPositionOfElementInSortedArray::searchRange(vector<int>& nums, int target)
 {
     int n = nums.size();
@@ -340,7 +340,7 @@ vector<int> FindFirstAndLastPositionOfElementInSortedArray::searchRange(vector<i
     return ans;
  }
 
- /*--------------------------35--------------------------*/
+ /*--------------------------35--------------------------*/ //没写出来的
 
 int SearchInsertPosition::searchInsert(vector<int>& nums, int target)
 {
@@ -380,7 +380,7 @@ bool SearchA2DMatrix::searchMatrix(vector<vector<int>>& matrix, int target)
     return false;
 }
 
- /*--------------------------124--------------------------*/
+ /*--------------------------124--------------------------*/ //没写出来的
 
 int BinaryTreeMaximumPathSum::maxGain(TreeNode* root)
 {
@@ -432,7 +432,7 @@ vector<int> BinaryTreeInorderTraversal::inorderTraversal(TreeNode* root)
     return ans;
 }
 
- /*--------------------------98--------------------------*/
+ /*--------------------------98--------------------------*/ //没写出来的
 // 这种方法的错误之处在于，底层的右边有可能会大于爷爷节点
 // bool ValidateBinarySearchTree::isValidBST(TreeNode* root)
 // {
@@ -467,6 +467,7 @@ bool ValidateBinarySearchTree::isValidBST(TreeNode* root)
 
 
  /*--------------------------101--------------------------*/
+ // 没写出来的
 bool SymmetricTree::equal(TreeNode* left, TreeNode* right)
 {
     // 先判断有没有
@@ -486,4 +487,118 @@ bool SymmetricTree::equal(TreeNode* left, TreeNode* right)
 bool SymmetricTree::isSymmetric(TreeNode* root)
 {
     return equal(root->left, root->right);
+}
+
+ /*--------------------------102--------------------------*/
+ vector<vector<int>> BinaryTreeLevelOrderTraversal::levelOrder(TreeNode* root)
+ {
+    if(root == nullptr) return {};
+    queue<TreeNode*> q{};
+    vector<vector<int>> ans{};
+    q.push(root);
+    ans.push_back({root->val});
+    while(q.size() > 0)
+    {
+        int s = q.size();
+        vector<int> temp{};
+        while(s > 0)
+        {
+            TreeNode* node = q.front();
+            q.pop();
+            temp.push_back(node->val);
+            if(node->left) q.push(node->left);
+            if(node->right) q.push(node->right);
+            --s;
+        }
+        ans.push_back(temp);
+    }
+    return ans;
+ }
+
+ /*--------------------------104--------------------------*/
+ int MaximumDepthOfBinaryTree::maxDepth(TreeNode* root)
+ {
+    if(root == nullptr) return 0;
+    queue<TreeNode*> q{};
+    int ans{0};
+    q.push(root);
+    while(q.size() > 0)
+    {
+        int s = q.size();
+        while(s > 0)
+        {
+            TreeNode* node = q.front();
+            q.pop();
+            if(node->left) q.push(node->left);
+            if(node->right) q.push(node->right);
+            --s;
+        }
+        ++ans;
+    }
+    return ans;
+ }
+
+ /*--------------------------104--------------------------*/ //没写出来
+TreeNode* ConstructBinaryTreeFromPreorderAndInorderTraversal::myTree(vector<int>& preorder, vector<int>& inorder, int p_left, int p_right, int in_left, int in_right)
+{
+    if(p_left > p_right) return nullptr;
+    // preorder就是root最前面，root，left，right
+    // 所以left就是root
+    int p_root = p_left;
+    // inorder里面root的位置
+    int in_root = hash[preorder[p_root]];
+
+    // 创建根节点
+    TreeNode* root = new TreeNode(preorder[p_root]);
+    // 左支的长度
+    int size_left_subtree = in_root - in_left;
+    // 递归的思想，我这一层分两支，分完之后交给下一层
+    root->left = myTree(preorder, inorder, p_left + 1, p_left + size_left_subtree, in_left, in_root - 1);
+    root->right = myTree(preorder, inorder, p_left + size_left_subtree + 1, p_right, in_root + 1, in_right);
+}
+
+
+TreeNode* ConstructBinaryTreeFromPreorderAndInorderTraversal::buildTree(vector<int>& preorder, vector<int>& inorder)
+{
+    int n = inorder.size();
+    // 哈希表记录root的真正位置
+    for(int i{0}; i < n; ++i)
+    {
+        hash[inorder[i]] = i;
+    }
+    return myTree(preorder, inorder, 0, n - 1, 0, n - 1);
+}
+
+ /*--------------------------108--------------------------*/ //没写出来
+TreeNode* ConvertSortedArrayToBinarySearchTree::sortedArrayToBST(vector<int>& nums)
+{
+    if(nums.size() == 0) return nullptr;
+    if(nums.size() == 1) return new TreeNode(nums[0]);
+
+    int middle = nums.size() / 2;
+    // BST顺序读取是inorder形式，
+    // 每次都找中间那个，这样就满足binary search tree
+    // 作为当前节点
+    TreeNode* root = new TreeNode(nums[middle]);
+    // 把左右分支确定好，然后就可以开始递归了
+    vector<int> leftInts(nums.begin(), nums.begin() + middle);
+    vector<int> rightIns(nums.begin() + middle + 1, nums.end());
+    // 左右节点就靠递归了
+    root->left = sortedArrayToBST(leftInts);
+    root->right = sortedArrayToBST(rightIns);
+    return root;
+}
+
+/*--------------------------114--------------------------*/ //没写出来
+void FlattenBinaryTreeToLinkedList::flatten(TreeNode* root)
+{
+    // 后续遍历，但是记录下前一层的来当成pre。从而反向链接
+    // 这里拉是拉前序遍历，就是反过来的后续遍历
+    // 后续遍历才好记录前面的值
+    if(root == nullptr) return;
+    flatten(root->right);
+    flatten(root->left);
+    root->right = pre;
+    root->left = nullptr;
+    pre = root;
 }

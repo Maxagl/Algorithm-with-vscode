@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <queue>
 
 using namespace std;
 const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
@@ -136,4 +137,39 @@ class SymmetricTree
 public:
     bool equal(TreeNode* left, TreeNode* right);
     bool isSymmetric(TreeNode* root);
+};
+
+class BinaryTreeLevelOrderTraversal
+{
+public:
+    vector<vector<int>> levelOrder(TreeNode* root);
+};
+
+class MaximumDepthOfBinaryTree
+{
+public:
+    int maxDepth(TreeNode* root);
+};
+
+class ConstructBinaryTreeFromPreorderAndInorderTraversal
+{
+private:
+    unordered_map<int, int> hash{};
+public:
+    TreeNode* myTree(vector<int>& preorder, vector<int>& inorder, int p_left, int p_right, int in_left, int in_right);
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder);
+};
+
+class ConvertSortedArrayToBinarySearchTree
+{
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums);
+};
+
+class FlattenBinaryTreeToLinkedList
+{
+private:
+    TreeNode* pre = nullptr;
+public:
+    void flatten(TreeNode* root);
 };
