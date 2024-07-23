@@ -602,3 +602,94 @@ void FlattenBinaryTreeToLinkedList::flatten(TreeNode* root)
     root->left = nullptr;
     pre = root;
 }
+
+/*--------------------------114--------------------------*/ //push_back的位置出来点小问题
+vector<int> BinaryTreeRightSideView::rightSideView(TreeNode* root)
+{
+    // 层次遍历
+    if(root == nullptr) return {};
+    queue<TreeNode*> q{};
+    vector<int> ans;
+    q.push(root);
+    while(q.size() > 0)
+    {
+        int n = q.size();
+        // 放到while后面会出错，最后一个会多push一次。但是不会报错，会把最后一个值再push进去一次
+        ans.push_back(q.back()->val);
+        while(n > 0)
+        {
+            TreeNode* temp = q.front();
+            q.pop();
+            if(temp->left) q.push(temp->left);
+            if(temp->right) q.push(temp->right);
+            --n;
+        }
+    }
+    return ans;
+}
+/*--------------------------226--------------------------*/
+TreeNode* InvertBinaryTree::invertTree(TreeNode* root)
+{
+    // 注意判断nullptr
+    if(root == nullptr) return nullptr;
+    // 把当前层的左右分支弄好
+    TreeNode* temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+    // 递归交给下一层
+    invertTree(root->left);
+    invertTree(root->right);
+    return root;      
+}
+
+/*--------------------------230--------------------------*/
+void KthSmallestElementInABST::inorder(TreeNode* root, const int k, int i, int ans)
+{
+    // 需要确认是否为nullptr
+    if(root == nullptr) return;
+    if(root->left) inorder(root->left, k, i, ans);
+    if(i < k) ++i;
+    // 需要确保返回出去之后，不会再进来，要准确的值
+    else if(k == i)
+    {
+        ++i;
+        ans = root->val;
+        return;
+    }
+    if(root->right) inorder(root->right, k, i, ans);
+}   
+int KthSmallestElementInABST::kthSmallest(TreeNode* root, int k)
+{
+    int i{1};
+    int ans{};
+    inorder(root->left, k, i, ans);
+    return ans; 
+}
+
+/*--------------------------236--------------------------*/
+TreeNode* LowestCommonAncestorOfABinaryTree::lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q)
+{
+    // 找到了就返回，会返回给left或者right
+    if(root == nullptr || root ==p || root == q) return root;
+    // 当前节点没找到，就去找left和right
+    TreeNode* left = lowestCommonAncestor(root->left, p, q);
+    TreeNode* right = lowestCommonAncestor(root->right, p, q);
+    // 都找完了，看left和right的情况，
+    // 1. 都是null那就是没找到，返回null
+    // 2. left为null，right里面肯定包含了
+    // 3. right为null， left里面肯定包含了
+    // 这题疑惑的点在于，我返回的时候找到了，怎么确保它是最近的公共祖先
+    // 找到的时候肯定是一层层返回的，不会一下跳很高，你跳很多层想就会蒙了
+    // 先想找到p或者q的节点
+    // 然后就返回到left，或者right。如果两边都有那就直接结束了，当前root节点就是答案
+    // 如果只有一边，那就只返回那一边，因为另一边为nullptr
+    // 一直没找到，就会一直返回这个分支。知道两个分支都有值了。两个都有值就是答案了
+    // 如果另一边一直没找到，那就说明它自己就是最近祖先
+    
+    if(left == nullptr && right == nullptr) return nullptr;
+    if(left == nullptr) return right;
+    if(right == nullptr) return left;
+    // 然后当返回到一层，另一个值也找到的时候，那就是答案了。
+    return root;
+}
+

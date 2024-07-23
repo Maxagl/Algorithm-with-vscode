@@ -173,3 +173,22 @@ private:
 public:
     void flatten(TreeNode* root);
 };
+
+class BinaryTreeRightSideView
+{
+public:
+    vector<int> rightSideView(TreeNode* root);
+};
+
+class InvertBinaryTree
+{
+public:
+    TreeNode* invertTree(TreeNode* root);
+};
+
+class KthSmallestElementInABST
+{
+public:
+    void inorder(TreeNode* root, const int k, int i, int ans);
+    int kthSmallest(TreeNode* root, int k);
+};
