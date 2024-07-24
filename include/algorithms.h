@@ -192,3 +192,24 @@ public:
     void inorder(TreeNode* root, const int k, int i, int ans);
     int kthSmallest(TreeNode* root, int k);
 };
+
+class LowestCommonAncestorOfABinaryTree
+{
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q);
+};
+
+class  PathSumIII
+{
+public:
+    void dfs(TreeNode* root, int targetSum, long long temp, int& ans);
+    void preOrder(TreeNode* root, int targetSum, int& ans);
+    int pathSum(TreeNode* root, int targetSum);
+};
+
+class DiameterOfBinaryTree
+{
+public:
+    int dfs(TreeNode* root, int &d);
+    int diameterOfBinaryTree(TreeNode* root);
+};

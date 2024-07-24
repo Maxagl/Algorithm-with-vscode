@@ -666,7 +666,7 @@ int KthSmallestElementInABST::kthSmallest(TreeNode* root, int k)
     return ans; 
 }
 
-/*--------------------------236--------------------------*/
+/*--------------------------236--------------------------*/ // 没做出来
 TreeNode* LowestCommonAncestorOfABinaryTree::lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q)
 {
     // 找到了就返回，会返回给left或者right
@@ -693,3 +693,54 @@ TreeNode* LowestCommonAncestorOfABinaryTree::lowestCommonAncestor(TreeNode* root
     return root;
 }
 
+
+/*--------------------------437--------------------------*/
+// 中文答案的前缀方法可以学一下
+void PathSumIII::dfs(TreeNode* root, int targetSum, long long temp, int& ans)
+{
+    temp += root->val;
+    if(temp == targetSum) ans += 1;
+    // 如果这里不判断nullptr，会导致叶节点的左右分支，两个nullptr的结果判断两次。
+    // 如果刚好叶节点是答案，这答案会加两次
+    // 所以先加了，判断答案，再进行递归   
+    if(root->left) dfs(root->left, targetSum, temp, ans);
+    if(root->right) dfs(root->right, targetSum, temp, ans);
+}
+
+void PathSumIII::preOrder(TreeNode* root, int targetSum, int& ans)
+{
+    if(root == nullptr) return;
+    dfs(root, targetSum, 0, ans);
+    if(root->left) preOrder(root->left, targetSum, ans);
+    if(root->right) preOrder(root->right, targetSum, ans);
+    
+}
+
+int PathSumIII::pathSum(TreeNode* root, int targetSum)
+{
+    int ans{0};
+    preOrder(root, targetSum, ans);
+    return ans;
+}
+
+/*--------------------------437--------------------------*/
+int DiameterOfBinaryTree::diameterOfBinaryTree(TreeNode* root)
+{
+    int d{0};
+    dfs(root, d);
+    return d;
+}
+
+int DiameterOfBinaryTree::dfs(TreeNode* root, int& d)
+{
+    if(root == nullptr) return 0;
+    int ld = dfs(root->left, d);
+    int rd = dfs(root->right, d);
+    d = max(d, ld + rd);
+    // 关键点是这个加1
+    // 当我们递归到leaf node， dfs返回出来的都是0
+    // ld, rd都是0
+    // 但是我们需要保存当前节点往下的最长路径，一层就加1
+    // 这里leaf最终返回给它的root node 长度1的路径
+    return max(ld, rd) + 1;
+}
