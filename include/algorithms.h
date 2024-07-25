@@ -213,3 +213,15 @@ public:
     int dfs(TreeNode* root, int &d);
     int diameterOfBinaryTree(TreeNode* root);
 };
+
+class LongestPalindromicSubstring
+{
+public:
+    string longestPalindrome(string s);
+};
+
+class LongestValidParentheses
+{
+public:
+    int longestValidParentheses(string s);
+};

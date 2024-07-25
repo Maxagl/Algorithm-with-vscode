@@ -723,7 +723,7 @@ int PathSumIII::pathSum(TreeNode* root, int targetSum)
     return ans;
 }
 
-/*--------------------------437--------------------------*/
+/*--------------------------437--------------------------*/ //没做出来
 int DiameterOfBinaryTree::diameterOfBinaryTree(TreeNode* root)
 {
     int d{0};
@@ -744,3 +744,78 @@ int DiameterOfBinaryTree::dfs(TreeNode* root, int& d)
     // 这里leaf最终返回给它的root node 长度1的路径
     return max(ld, rd) + 1;
 }
+
+/*--------------------------5--------------------------*/ //没做出来
+string LongestPalindromicSubstring::longestPalindrome(string s)
+{
+    // 回文串涉及到左右，需要先考虑到二维dp
+    int n = s.size();
+    bool dp[n][n];
+    // 二维dp初始化
+    for(int i{0}; i < n; ++i)
+    {
+        for(int j{0}; j < n; ++j)
+        {
+            dp[i][j] = false;
+        }
+    }
+    // 一个数必是回文，所以maxlen为1
+    int maxLen = 1;
+    int start = 0;
+    int end = 0;
+    // 以i结尾的回文串
+    for(int i{0}; i < n; ++i)
+    {
+        dp[i][i] = true;
+        // 想想一个字符串，从左边往内缩，因为右边是固定的
+        for(int j{0}; j < i; ++j)
+        {
+            // 如果两个端点相等，就可以往内部考虑
+            // 如果内部再缩一层发现是true，那么当前层就是正确的
+            // 或者刚好3个数，那么肯定也是回文串了
+            // i-1相关的已经在上一层全部判断过了
+            if(s[i] == s[j] && (i - j <= 2 || dp[j + 1][i - 1]))
+            {
+                dp[j][i] = true;
+                // 判断最大值
+                if(i - j + 1 > maxLen)
+                {
+                    maxLen = i - j + 1;
+                    start = j;
+                    end = i;
+                }
+            }
+        }
+    }
+    return s.substr(start, maxLen); 
+}
+
+/*--------------------------32--------------------------*/ //没做出来
+int longestValidParentheses(string s)
+{
+    int maxans = 0;
+    int n = s.length();
+    vector<int> dp(n, 0);
+    for(int i{1}; i < n; ++i)
+    {
+        if(s[i] == ')')
+        {
+            // i-1两种情况,左或者右
+            // 刚好加一对括号
+            if(s[i - 1] == '(')
+            {
+                dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+            }
+            // 如果两个右括号，那就是把前一个当成dp，去判断它的最左端的左边一个是不是左括号
+            // 是的话就可以扩充了
+            else if(i - dp[i - 1] > 0 && s[i - dp[i - 1] - 1] == '(')
+            {
+                // 内部都是 i - 1 不是i别写错了。要从上一层动态到这一层
+                dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
+            }
+            maxans = max(maxans, dp[i]);
+        }
+    }
+    return maxans;
+}
+
