@@ -819,3 +819,134 @@ int longestValidParentheses(string s)
     return maxans;
 }
 
+/*--------------------------62--------------------------*/
+int UniquePaths::uniquePaths(int m, int n)
+{
+    // 当前节点 = 上面+左边
+    int dp[m][n];
+    dp[0][0] = 1;
+    // 边界条件处理一下就行
+    for(int i{1}; i < m; ++i)
+    {
+        dp[i][0] = dp[i - 1][0];
+    }
+    for(int j{1}; j < n; ++j)
+    {
+        dp[0][j] = dp[0][j - 1];
+    }
+    for(int i{1}; i < m; ++i)
+    {
+        for(int j{1}; j < n; ++j)
+        {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+
+/*--------------------------64--------------------------*/
+// 和62一样，不过这次要判断是否为最小
+int MinimumPathSum::minPathSum(vector<vector<int>>& grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    int dp[m][n];
+    dp[0][0] = grid[0][0];
+    for(int i{1}; i < m; ++i)
+    {
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+    }
+    for(int j{1}; j < n; ++j)
+    {
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+    }
+    for(int i{1}; i < m; ++i)
+    {
+        for(int j{1}; j < n; ++j)
+        {
+            dp[i][j] = min(dp[i - 1][j], dp[i][ j - 1]) + grid[i][j];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+
+/*--------------------------70--------------------------*/
+int ClimbingStairs::climbStairs(int n)
+{
+    // 可以n + 1
+    // 把0的时候也赋值1，就可以不用考虑边界了
+    int dp[n];
+    // 注意下边界条件
+    if(n == 1) return 1;
+    dp[0] = 1;
+    dp[1] = 2;
+    for(int i{2}; i < n; ++i)
+    {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n - 1];   
+}
+
+/*--------------------------72--------------------------*/ //没做出来
+int EditDistance::minDistance(string word1, string word2)
+{
+    int m = word1.size();
+    int n = word2.size();
+    int dp[m + 1][n + 1];
+    if(m == 0 && n == 0) return 0;
+    // 初始化为0
+    // dp[i][j] 表示从word1的0-i位，变化到word2的0-j位所需要的次数。
+    // 变化有三种形式，A增，B增，改。对应前面一层为dp[i][j - 1]，dp[i - 1][j], dp[i - 1][j - 1];
+    // dp[i][j - 1] --> dp[i][j],因为i到j-1的变化次数已经定了，所以当j-1变到j，
+    // 只需再i后面再加一个相同的，其他的继续那么变就行
+    // 其实也是一种贪心，一直选最小的那种变化
+    // 合理性逆向思维来想更好，i 到 j，肯定上面三种情况变过来
+    for(int i{0}; i < m; ++i)
+    {
+        for(int j{0}; j <= n; ++j)
+        {
+            dp[i][j] = 0;
+        }
+    }
+    // 变到空，全部删掉就行
+    for(int i{1}; i <= m; ++i) dp[i][0] = i;
+    // 空变，全部加进来就可以
+    for(int j{1}; j <= n; ++j) dp[0][j] = j;
+
+    for(int i{1}; i <= m; ++i)
+    {
+        for(int j{1}; j <= n; ++j)
+        {
+            if(word1[i - 1] == word2[j - 1]) dp[i][j] = dp[i - 1][j - 1];
+            // 
+            else dp[i][j] = min(dp[i - 1][j], min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+        }
+    }
+    return dp[m][n];
+}
+
+/*--------------------------118--------------------------*/ //没做出来
+vector<vector<int>> PascalTriangle::generate(int numRows)
+{
+    vector<vector<int>> ans{};
+    // 一个行更特殊
+    if(numRows == 1) return {{1}};
+    // 把最初的两个特殊情况放进去
+    ans.push_back({1});
+    ans.push_back({1, 1});
+    for(int i{2}; i < numRows; ++i)
+    {
+        // 元素个数比行数多1
+        vector<int> temp(i + 1, 0);
+        // 起点和终点都是特殊，直接赋值，因为只有一个数
+        temp[0] = 1;
+        temp[i] = 1;
+        // 最开始的0号和最尾端的1号已经赋值，不用管
+        for(int j{1}; j < i; ++j)
+        {
+            temp[j] = ans[i - 1][j - 1] + ans[i - 1][j];  
+        }
+        ans.push_back(temp);
+    }
+    return ans;     
+}

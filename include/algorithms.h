@@ -225,3 +225,33 @@ class LongestValidParentheses
 public:
     int longestValidParentheses(string s);
 };
+
+class UniquePaths
+{
+public:
+    int uniquePaths(int m, int n);
+};
+
+class MinimumPathSum
+{
+public:
+    int minPathSum(vector<vector<int>>& grid);
+};
+
+class ClimbingStairs
+{
+public:
+    int climbStairs(int n);
+};
+
+class EditDistance
+{
+public:
+    int minDistance(string word1, string word2);
+};
+
+class PascalTriangle
+{
+public:
+    vector<vector<int>> generate(int numRows);
+};
