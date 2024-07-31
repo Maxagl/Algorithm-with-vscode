@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include <unordered_set>
 
 using namespace std;
 const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
@@ -254,4 +255,34 @@ class PascalTriangle
 {
 public:
     vector<vector<int>> generate(int numRows);
+};
+
+class WordBreak
+{
+public:
+    bool wordBreak(string s, vector<string>& wordDict);
+};
+
+class MaximumProductSubarray
+{
+public:
+    int maxProduct(vector<int>& nums);
+};
+
+class HouseRobber
+{
+public:
+    int rob(vector<int>& nums);
+};
+
+class PerfectSquares
+{
+public:
+    int numSquares(int n);
+};
+
+class LongestIncreasingSubsequence
+{
+public:
+    int lengthOfLIS(vector<int>& nums);
 };

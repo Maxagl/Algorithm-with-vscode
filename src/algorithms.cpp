@@ -875,6 +875,7 @@ int ClimbingStairs::climbStairs(int n)
 {
     // 可以n + 1
     // 把0的时候也赋值1，就可以不用考虑边界了
+    // 爬到第n阶的种数
     int dp[n];
     // 注意下边界条件
     if(n == 1) return 1;
@@ -892,6 +893,7 @@ int EditDistance::minDistance(string word1, string word2)
 {
     int m = word1.size();
     int n = word2.size();
+    // 由m位的word1变到word2的最小步数
     int dp[m + 1][n + 1];
     if(m == 0 && n == 0) return 0;
     // 初始化为0
@@ -949,4 +951,117 @@ vector<vector<int>> PascalTriangle::generate(int numRows)
         ans.push_back(temp);
     }
     return ans;     
+}
+
+/*--------------------------139--------------------------*/ //没做出来
+bool wordBreak(string s, vector<string>& wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    int n = s.size();
+    // 第i个位置能否完整的分隔为多个单词
+    bool dp[n + 1];
+    for(int i{0}; i < n + 1; ++i) dp[i] = false;
+    dp[0] = true;
+    // 以s的第i位结尾的字符串能否被分割
+    for(int i{1}; i <= n; ++i)
+    {
+        for(int j{0}; j < i; ++j)
+        {
+                // 扩展了一个字符后，需要判断当前的j能否分割，
+                // 剩下的j到i-j是否属于一个单词，属于就ok了。跳出来去下一个点
+                // dp[j]的j其实是s中第j-1位，所以sub的时候可以直接从j开始
+                // 同事i也是第 i - 1位，所以不能包括i，不能i-j+1
+            if(dp[j] && wordSet.find(s.substr(j, i - j)) != wordSet.end())
+            {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[n];
+}
+
+/*--------------------------152--------------------------*/ //没做出来
+int MaximumProductSubarray::maxProduct(vector<int>& nums)
+{
+    // 需要用double才能过
+    int maxP = nums[0];
+    int minP = nums[0];
+    int n = nums.size();
+    int ans = nums[0];
+    // 构建最小值和最大值
+    // 不需要管正负
+    // 每一次的最大值就是，当前值，最大值乘以当前值，最小值。这三这中间取
+    // 最小值也同理
+    // 最后更新最大值即可
+    for(int i{1}; i < n; ++i)
+    {
+        int mx = maxP;
+        int mn = minP;
+        maxP = max(mx * nums[i], max(nums[i], mn * nums[i]));
+        minP = min(mn * nums[i], min(nums[i], mx * nums[i]));
+        ans = max(ans, maxP);
+    }
+    return ans;
+}
+
+/*--------------------------198--------------------------*/ //没做出来
+int HouseRobber::rob(vector<int>& nums)
+{
+    int n = nums.size();
+    // 到第i个房子能抢到的最大值
+    int dp[n];
+    dp[0] = nums[0];
+    if(n == 1) return dp[0];
+    dp[1] = max(nums[0], nums[1]);
+    // 抢上一家，这一家就不能抢
+    // 抢上上一家，可以抢当前
+    for(int i{2}; i < n; ++i)
+    {
+        dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
+    }
+    return dp[n - 1];
+}
+
+/*--------------------------279--------------------------*/ //没做出来
+int PerfectSquares::numSquares(int n)
+{
+    int dp[n + 1];
+    dp[0] = 0;
+    for(int i{1}; i <= n; ++i)
+    {
+        int minN = INT_MAX;
+        // 关键在于这个 j * j <= i。这种条件设置要记住
+        // for循环的条件可以是简单的表达式
+        for(int j{1}; j * j <= i; ++j)
+        {
+            // 这里减去的是j平方，如果找到了最小的只需要加上j平方就行了。也就是后续的1。
+            // 因为dp[0]一直是0，所以当i刚好为完全平方的时候也会找到
+            minN = min(minN, dp[i - j * j]);
+        }
+        // 这里保证小于i的都有对应值了
+        dp[i] = 1 + minN;
+    }
+    return dp[n];
+}
+
+int LongestIncreasingSubsequence::lengthOfLIS(vector<int>& nums)
+{
+    int n = nums.size();
+    // 以i结尾的最大长度
+    int dp[n];
+    int ans{1};
+    for(int i{0}; i < n; ++i) dp[i] = 1;
+    // 一层不行，会错过很多可能的值。因为每次都是重新开始计数。但是这里是subsequence。
+    // 跳过这个最大的也是可以的。要把前面的到i为止都要考虑一遍才是正确的
+    for(int i{1}; i < n; ++i)
+    {
+        for(int j{0}; j < i; ++j)
+        {
+            // 这里不是相邻的比，而是与最后一位比
+            if(nums[i] > nums[j]) dp[i] = max(dp[i], dp[j] + 1);
+        }
+    }
+    for(int i{0}; i < n; ++i) ans = max(ans, dp[i]);
+    return ans;
 }
