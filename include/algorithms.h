@@ -3,6 +3,8 @@
 #include <string>
 #include <queue>
 #include <unordered_set>
+#include <algorithm>
+#include <numeric>
 
 using namespace std;
 const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
@@ -285,4 +287,41 @@ class LongestIncreasingSubsequence
 {
 public:
     int lengthOfLIS(vector<int>& nums);
+};
+
+class CoinChange
+{
+public:
+    int coinChange(vector<int>& coins, int amount);
+};
+
+class PartitionEqualSubsetSum
+{
+public:
+    bool canPartition(vector<int>& nums);
+};
+
+class LongestCommonSubsequence
+{
+public:
+    int longestCommonSubsequence(string text1, string text2);
+};
+
+class NumberOfIslands
+{
+public:
+    int numIslands(vector<vector<char>>& grid);
+    void dfs(vector<vector<char>>& grid, int r, int c);
+};
+
+class CourseSchedule
+{
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites);
+};
+
+class RottingOranges
+{
+public:
+    int orangesRotting(vector<vector<int>>& grid);
 };

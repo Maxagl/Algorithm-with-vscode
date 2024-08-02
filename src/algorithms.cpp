@@ -1065,3 +1065,200 @@ int LongestIncreasingSubsequence::lengthOfLIS(vector<int>& nums)
     for(int i{0}; i < n; ++i) ans = max(ans, dp[i]);
     return ans;
 }
+
+/*--------------------------322--------------------------*/ //没做出来
+int CoinChange::coinChange(vector<int>& coins, int amount)
+{
+    // 第i个值，所需要的最小硬币数量
+    int dp[amount + 1];
+    sort(coins.begin(), coins.end());
+    dp[0] = 0;
+
+    for(int i{1}; i <= amount; ++i)
+    {
+        dp[i] = INT_MAX;
+        // 这里用硬币来循环会减少很多次循环，一个个加很容易出问题
+        for(int c: coins)
+        {
+            if(i - c < 0) break;
+            if(dp[i - c] != INT_MAX) dp[i] = min(dp[i], dp[i - c] + 1);
+        }
+    }
+    return dp[amount] == INT_MAX ? - 1 : dp[amount];
+}
+
+/*--------------------------416--------------------------*/ // 没做出啦，看中文官方答案
+bool canPartition(vector<int>& nums)
+{
+    int n = nums.size();
+    if( n < 2) return false;
+    
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    int maxNum = *max_element(nums.begin(), nums.end());
+    // 总和为奇数不能平分，所以不存在答案
+    if(sum % 2 != 0) return false;
+    // 单个数大于一半，不存在答案
+    int target = sum / 2;
+    if(maxNum > target) return false;
+
+    // dp[i][j]，从0到第i号元素中选取，能否构成和为j
+    vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+    for(int i{0}; i < n; ++i)
+    {
+        // 全都不取就可以构成0，所以为true
+        dp[i][0] = true;
+    }
+    
+    dp[0][nums[0]] = true;
+    for(int i{1}; i < n; ++i)
+    {
+        for(int j{1}; j <= target; ++j)
+        {
+            // 目标值大于当前的num可以选或者不选，全都反应在上一层的j里面
+            // 如果两种选择都不满足，那就是无法满足了
+            if(nums[i] <= j) dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i]];
+            // 目标值大于当前的num了，肯定不能选当前的num了。
+            else dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[n - 1][target];
+}
+
+int LongestCommonSubsequence::longestCommonSubsequence(string text1, string text2)
+{
+    // 有人说和Edit distance类似， 但这表达式和意义完全不一样吧
+    // 只能说架构一样？
+    int m = text1.size();
+    int n = text2.size();
+    // 可以这样初始化
+    // 其中 dp[i][j] 表示 text1[0:i] 和 text2[0:j] 的最长公共子序列的长度。
+    int dp[1001][1001] = {};
+
+    for(int i{0}; i < m; ++i)
+    {
+        for(int j{0}; j < n; ++j)
+        {
+            // 相同要取找上一层加1
+            if(text1[i] == text2[j]) dp[i + 1][j + 1] = dp[i][j] + 1;
+            // 不相同就去找，减掉一个数的最大值
+            else dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1]);
+        }
+    }
+    return dp[m][n];
+}
+
+/*--------------------------200--------------------------*/
+int NumberOfIslands::numIslands(vector<vector<char>>& grid)
+{
+    int ans{0};
+    int r = grid.size();
+    int c = grid[0].size();
+    for(int i{0}; i < r; ++i)
+    {
+        for(int j{0}; j < c; ++j)
+        {
+            if(grid[i][j] == '1')
+            {
+                dfs(grid, i, j);
+                ++ans;
+            }
+        }
+    }
+    return ans;
+}
+
+void NumberOfIslands::dfs(vector<vector<char>>& grid, int r, int c)
+{
+    grid[r][c] = '*';
+    for(auto dir :DIR4)
+    {
+        int nextR = r + dir[0];
+        int nextC = c + dir[1];
+        if(nextR < grid.size() && nextR >= 0 && nextC < grid[0].size() && nextC >= 0 && grid[nextR][nextC] == '1')
+        {
+            dfs(grid, nextR, nextC);
+        }
+    }
+}
+
+
+/*--------------------------207--------------------------*/
+bool CourseSchedule::canFinish(int numCourses, vector<vector<int>>& prerequisites)
+{
+    vector<vector<int>> G(numCourses);
+    vector<int> degree(numCourses, 0), bfs;
+    // 0是要上的课，1是前提。1-->0
+    for(auto& pre : prerequisites)
+    {
+        G[pre[1]].push_back(pre[0]);
+        // 第pre[0]堂课的入度加1
+        ++degree[pre[0]];
+    }
+    // 关键是下面两个for循环
+    // 1. 寻找开始的课程，也就是入度为0的课程
+    // 2. 对入度为0的课程进行bfs，把和它连接的课程入度全部减1。
+    // 3. 检查入度，入度为0的继续加入
+    // 4. 能上完所有课程，bfs里面所有课程入度都变为0了
+    for(int i{0}; i < numCourses; ++i)
+    {
+        // 入度为0的课先开始
+        if(!degree[i]) bfs.push_back(i);
+    }
+    for(int i{0}; i < bfs.size(); ++i)
+    {
+        for(int j: G[bfs[i]])
+        {
+            --degree[j];
+            if(degree[j] == 0) bfs.push_back(j);
+        }
+    }
+    return bfs.size() == numCourses;
+}
+
+int RottingOranges::orangesRotting(vector<vector<int>>& grid)
+{
+    queue<pair<int,int>> q{};
+    int m = grid.size();
+    int n = grid[0].size();
+    int orange{0};
+    // 记录坏橘子队列，和新鲜橘子数量
+    for(int i{0}; i < m; ++i)
+    {
+        for(int j{0}; j < n; ++j)
+        {
+            if(grid[i][j] == 2)
+            {
+                q.emplace(i, j);
+            }
+            else if(grid[i][j] == 1) ++orange;
+        }
+    }
+    // 没有新鲜也没有坏的，直接返回
+    if(orange == 0 && q.size() == 0) return 0;
+    int ans{-1};
+    // BFS形式一层层的往外扩张，
+    while(q.size())
+    {
+        int s = q.size();
+        for(int i{0}; i < s; ++i)
+        {
+            pair<int, int> pos = q.front();
+            q.pop();
+            for(auto dir : DIR4)
+            {
+                int nextR = pos.first + dir[0];
+                int nextC = pos.second + dir[1];
+                if(nextR < m && nextR >= 0 && nextC < n && nextC >= 0 && grid[nextR][nextC] == 1)
+                {
+                    --orange;
+                    grid[nextR][nextC] = 2;
+                    q.emplace(nextR, nextC);
+                }
+            }
+        }
+        ++ans;
+    }
+    return orange == 0 ? ans : -1;    
+}
+
+
