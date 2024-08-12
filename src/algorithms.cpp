@@ -1215,6 +1215,7 @@ bool CourseSchedule::canFinish(int numCourses, vector<vector<int>>& prerequisite
     return bfs.size() == numCourses;
 }
 
+
 int RottingOranges::orangesRotting(vector<vector<int>>& grid)
 {
     queue<pair<int,int>> q{};
@@ -1261,4 +1262,157 @@ int RottingOranges::orangesRotting(vector<vector<int>>& grid)
     return orange == 0 ? ans : -1;    
 }
 
+/*--------------------------45--------------------------*/ // 没做出来
+int JumpGameII::jump(vector<int>& nums)
+{
+    int currMax{0}, nextMax{0}, i{0};
+    int n = nums.size();
+    int level{0};
+    // bfs的方式，一层能找到的最远距离
+    // 会一个个遍历，所以当前i的值代表的是遍历的末尾
+    while(currMax - i + 1 > 0) // 当前层还能用的node数量
+    {
+        for(; i <= currMax; ++i) // currMax就是当前层的末尾
+        {
+            nextMax = max(nextMax, i + nums[i]);
+            if(i >= n - 1) return level;
+        }
+        ++level;
+        currMax = nextMax;
+    }
+    return 0;
+}
 
+bool JumpGame::canJump(vector<int>& nums)
+{
+    int i{0};
+    int n = nums.size();
+    // 一个个遍历（i）一直找能够到的最大值 reach
+    // 这个最大值能比i大，就证明肯定可以到了。因为可以选择不走那么远
+    // 当是当遍历的值要大于能够到的最大值时一定是不能跳完的
+    for(int reach = 0; i < n && i <= reach; ++i)
+    {
+        reach = max(i + nums[i], reach);
+    }
+    return i == n;
+}
+
+int BestTimeToBuyAndSellStock::maxProfit(vector<int>& prices)
+{
+    int minNum = INT_MAX;
+    int ans{0};
+    // 不断的更新当前的最小值
+    // 然后比较最小值和当前值之间能形成的利益，看是否大于上一次
+    for(int i{0}; i < prices.size(); ++i)
+    {
+        minNum = min(minNum, prices[i]);
+        ans = min(ans, prices[i] - minNum);
+    }
+    return ans;
+}
+
+vector<int> PartitionLabels::partitionLabels(string s)
+{
+    unordered_map<char, int> hash{};
+    int n = s.size();
+    // 把每个字符最后出现的位置记录下来
+    for(int i{0}; i < n; ++i)
+    {
+        hash[s[i]] = i;
+    }
+    vector<int> ans{};
+    int start{0};
+    int end{0};
+    // 需要一个个的进行索引
+    for(int i{0}; i < n; ++i)
+    {
+        // 不断地更新i对应字符的最终位置，看是否超过了前面那个
+        end = max(end, hash[s[i]]);
+        // 到达了当前的最大位置，说明可以算成一个分割区间了
+        if(i == end)
+        {
+            ans.push_back(end - start + 1);
+            start = end + 1;
+        }
+    }
+    return ans;
+}
+
+vector<int> TwoSum::twoSum(vector<int>& nums, int target)
+{
+    unordered_map<int, int> hash{};
+    for(int i{0}; i < nums.size(); ++i)
+    {
+        if(hash.find(target - nums[i]) != hash.end()) return {hash[target - nums[i]], i};
+        hash[nums[i]] = i;
+    }
+    return {};
+}
+
+/*--------------------------45--------------------------*/
+vector<vector<string>> groupAnagrams(vector<string>& strs)
+{
+    vector<vector<string>> ans{};
+    unordered_map<string, vector<string>> hash{};
+    for(auto str : strs)
+    {
+        string temp = str;
+        sort(temp.begin(), temp.end());
+        hash[temp].push_back(str);
+    }
+    for(auto s : hash)
+    {
+        ans.push_back(s.second);
+    }
+    return ans;
+}
+
+/*--------------------------128--------------------------*/ // 没做出来
+int longestConsecutive(vector<int>& nums)
+{
+    unordered_set<int> hash{};
+    int best{0};
+    int n = nums.size();
+    for(int i{0}; i < n; ++i) hash.insert(nums[i]);
+    for(auto num : hash)
+    {
+        int end{};
+        // hash里面是一个个的找，这会导致有些数字已经用过了。
+        // 如果这时候num的前面一个数是存在的，那就不应该管它。
+        // 要么num已经被计算过一次了，要么后续会被计算到。
+        if(!hash.count(num - 1))
+        {
+            end = num + 1;
+            // 找了连续的开头，逐个往后加
+            while(hash.count(end))
+            {
+                end += 1;
+            }
+            // 全部找到后判断是否要更新最大值
+            // 最后一个end是不连续的，所以这里要去掉end，也就是不加1
+            best = max(end - num, best);
+        }    
+    }
+    return best;
+}
+/*--------------------------560--------------------------*/ // 没做出来
+int subarraySum(vector<int>& nums, int k)
+{
+    unordered_map<int, int> hash{};
+    int n = nums.size();
+    int pre{};
+    int ans{};
+    // 以防前缀和刚好为k的时候
+    hash[0] = 1;
+    // 前缀和
+    for(auto x : nums)
+    {
+        pre += x;
+        // 因为有负数，所以同一个前缀和可能对应多个位置
+        if(hash.find(pre - k) != hash.end()) ans += hash[pre - k];
+        // 这里就是把对应多个位置的前缀和给加起来。这里加起来是为了给后面用
+        // 大部分的值还是1。
+        ++hash[pre];
+    }
+    return ans;
+}

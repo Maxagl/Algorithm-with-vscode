@@ -325,3 +325,51 @@ class RottingOranges
 public:
     int orangesRotting(vector<vector<int>>& grid);
 };
+
+class JumpGameII
+{
+public:
+    int jump(vector<int>& nums);
+};
+
+class JumpGame
+{
+public:
+    bool canJump(vector<int>& nums);
+};
+
+class BestTimeToBuyAndSellStock
+{
+public:
+    int maxProfit(vector<int>& prices);
+};
+
+class PartitionLabels
+{
+public:
+    vector<int> partitionLabels(string s);
+};
+
+class TwoSum
+{
+public:
+    vector<int> twoSum(vector<int>& nums, int target);
+};
+
+class GroupAnagrams
+{
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs);
+};
+
+class LongestConsecutiveSequence
+{
+public:
+    int longestConsecutive(vector<int>& nums);
+};
+
+class SubarraySumEqualsK
+{
+public:
+    int subarraySum(vector<int>& nums, int k);
+};
