@@ -1416,3 +1416,63 @@ int subarraySum(vector<int>& nums, int k)
     }
     return ans;
 }
+
+/*--------------------------215--------------------------*/ // 不是特别熟练
+int KthLargestElementInAnArray::findKthLargest(vector<int>& nums, int k)
+{
+    // 默认大根堆
+    // 这样处理变成小根堆，把最大的k元素存进来
+    priority_queue<int, std::vector<int>, std::greater<int>> mq{};
+    for(int i{0}; i < nums.size(); ++i)
+    {
+        if(mq.size() < k)
+        {
+            mq.push(nums[i]);
+        }
+        else
+        {
+            // 先push再pop，因为还要判断当前这个值和top的大小，直接pop会漏掉一次判断
+            mq.push(nums[i]);
+            mq.pop();
+        }
+    }
+    return mq.top();
+}
+
+void MedianFinder::addNum(int num)
+{
+    // small来存小的那一段，最顶层是小段的最中间
+    // large存大的那一段，最顶层是大段的最中间
+    // 因为流式造成的中间值的变化问题，全部交给大根堆和小根堆去解决了
+
+    // 先判断这个数是不是会属于小段，把最大的那个数挤出来
+    small.push(num);
+    // 挤出来之后取负数，就变成最小的了。
+    // 越大的数越在底层（转成负数了），越难挤出来。
+    large.push(-small.top());
+    // 因为挤出来了一个，所以要pop掉
+    small.pop();
+
+    // 因为前面一直把small的存到large里面
+    // 但我们为了保证两段相差最多为1，这里需要从large里面挤出来还给small
+    // if放在后面是因为，新来的数需要在小段和大段里面都取比较一次
+    // 两边的中心位置可能都要更新
+
+    if(small.size() < large.size())
+    {
+        small.push(-large.top());
+        large.pop();
+    }
+}
+double MedianFinder::findMedian()
+{
+    // small 肯定是大于等于large的，从1个数开始考虑下addNum的流程就知道了
+    return small.size() > large.size() ? small.top() : (small.top() - large.top()) / 2.0f;
+}
+
+vector<int> topKFrequent(vector<int>& nums, int k)
+{
+    unordered_map<int, int> hash;
+    priority_queue<int> hash;
+}
+

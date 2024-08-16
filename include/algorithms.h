@@ -373,3 +373,25 @@ class SubarraySumEqualsK
 public:
     int subarraySum(vector<int>& nums, int k);
 };
+
+class KthLargestElementInAnArray
+{
+public:
+    int findKthLargest(vector<int>& nums, int k);
+};
+
+class MedianFinder
+{
+public:
+    priority_queue<int> small;
+    priority_queue<int> large;
+    MedianFinder();
+    void addNum(int num);
+    double findMedian();
+};
+
+class TopKFrequentElements
+{
+    vector<int> topKFrequent(vector<int>& nums, int k);
+};
+
