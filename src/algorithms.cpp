@@ -1473,6 +1473,94 @@ double MedianFinder::findMedian()
 vector<int> topKFrequent(vector<int>& nums, int k)
 {
     unordered_map<int, int> hash;
-    priority_queue<int> hash;
+    for(auto& num: nums)
+    {
+        ++hash[num];
+    }
+    // 主要是这个数据结构
+    // pq会按照第一个元素比较
+    priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<pair<int, int>>> pq;
+    for(auto it = hash.begin(); it != hash.end(); ++it)
+    {
+        // 所以这里存的的时候要和hash反过来
+        if(pq.size() < k)
+        {
+            pq.emplace(it->second, it->first);
+        }
+        else
+        {
+            if(it->second > pq.top().first)
+            {
+                pq.pop();
+                pq.emplace(it->second, it->first);
+            }
+        }
+    }
+
+    vector<int> ans;
+    while(!pq.empty())
+    {
+        ans.push_back(pq.top().second);
+        pq.pop();
+    }
+    return ans;
 }
 
+/*--------------------------2--------------------------*/ // 没做出来
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) 
+{
+    // 当你原地苦难的时候，就思考下dummy
+    ListNode* dummy = new ListNode(0);
+    // head是用来在while循环内部进行更新
+    ListNode* head = dummy;
+    int adder{0};
+    while(l1 != nullptr || l2 != nullptr || adder != 0)
+    {
+        // 需要初始化，定义不会初始化
+        int num1{};
+        int num2{};
+        // 是不等于
+        if(l1 != nullptr)
+        {
+            num1 = l1->val;
+            l1 = l1->next;
+        }
+        if(l2 != nullptr)
+        {
+            num2 = l2->val;
+            l2 = l2->next;
+        }
+        // 加入adder
+        int sum = num1 + num2 + adder;
+        int num = sum % 10;
+        // 更新adder是困难的点
+        adder = sum / 10;
+        ListNode* tempNode = new ListNode(num);
+        head->next = tempNode;
+        head = head->next;
+    }    
+    return dummy->next;
+}
+
+ListNode* RemoveNthNodeFromEndofList::removeNthFromEnd(ListNode* head, int n)
+{
+    ListNode* left = head;
+    ListNode* right = head;
+    // 这里循环完要去掉的是left->next
+    for(int i{0}; i < n; ++i)
+    {
+        right = right->next;
+    }
+    // 关键点是 right的判断
+    if(right == nullptr) return left->next;
+    // 这里right还没到最后面，
+    while(right->next != nullptr)
+    {
+        left = left->next;
+        right = right->next;
+    }
+    // 可以next->next的原因是left在right一个之前。
+    // 前面while循环保证了right部位nullptr，所以这里可以直接next->next
+    left->next = left->next->next;
+    return head;   
+}

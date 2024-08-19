@@ -17,6 +17,14 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  };
 
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+ };
+
 
 class letter_Combination_Of_A_Phone
 {
@@ -392,6 +400,20 @@ public:
 
 class TopKFrequentElements
 {
+public:
     vector<int> topKFrequent(vector<int>& nums, int k);
+};
+
+class AddTwoNumbers
+{
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2); 
+};
+
+class RemoveNthNodeFromEndofList
+{
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n);
+
 };
 
