@@ -1542,6 +1542,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
     return dummy->next;
 }
 
+/*--------------------------19--------------------------*/ // 没做出来
 ListNode* RemoveNthNodeFromEndofList::removeNthFromEnd(ListNode* head, int n)
 {
     ListNode* left = head;
@@ -1563,4 +1564,128 @@ ListNode* RemoveNthNodeFromEndofList::removeNthFromEnd(ListNode* head, int n)
     // 前面while循环保证了right部位nullptr，所以这里可以直接next->next
     left->next = left->next->next;
     return head;   
+}
+
+/*--------------------------21--------------------------*/ // 没做出来
+ListNode* MergeTwoSortedLists::mergeTwoLists(ListNode* list1, ListNode* list2)
+{
+    // 这两个if是我没想到要这么返回的
+    if(list1 == nullptr) return list2;
+    if(list2 == nullptr) return list1;
+    if(list1->val >= list2->val)
+    {
+        // 这个等于也是没想到的，
+        list2->next = mergeTwoLists(list2->next, list1);
+        return list2;
+    }
+    else
+    {
+        list1->next = mergeTwoLists(list1->next, list2);
+        return list1;
+    }
+}
+
+/*--------------------------23--------------------------*/ // 没做出来
+ListNode* MergekSortedLists::mergeKLists(vector<ListNode*>& lists)
+{
+    // 创建一个临时变量，一个个和它合并，这样就不需要考虑两两合并的影响
+    // 复杂的问题简单化，只能靠多做来练习吗？
+    ListNode* ans = new ListNode(INT_MIN);
+    for(auto l : lists)
+    {
+        ans = merge(ans, l);
+    }
+    return ans->next;
+}
+
+ListNode* MergekSortedLists::merge(ListNode* list1, ListNode* list2)
+{
+    if(list1 == nullptr) return list2;
+    if(list2 == nullptr) return list1;
+
+    if(list1->val >= list2->val)
+    {
+        list2->next = merge(list1, list2->next);
+        return list2;
+    }
+    else
+    {
+        list1->next = merge(list1->next, list2);
+        return list1;
+    }
+}
+
+/*--------------------------24--------------------------*/
+ListNode* SwapNodesinPairs::swapPairs(ListNode* head)
+{
+    // 复杂问题简单化就可以了，先考虑基础的步骤。
+    // 基础的步骤就是换两个
+    // 换完两个之后怎么换接下来的两个
+    // 这两个怎么连起来
+    // 连起来之后有哪些跳出条件要考虑
+    if(head == nullptr || head->next == nullptr) return head;
+    ListNode* temp = head->next;
+    head->next = swapPairs(head->next->next);
+    temp->next = head;
+    return temp;
+}
+
+/*--------------------------25--------------------------*/ // 没做出来
+ListNode* ReverseNodesinkGroup::reverseKGroup(ListNode* head, int k)
+{
+    ListNode* cursor = head;
+    // 检查一边还有没有k个
+    for(int i{0}; i < k; ++i)
+    {
+        if(cursor == nullptr) return head;
+        cursor = cursor->next;
+    }
+    // 有k个就正常的来反转
+    ListNode* curr = head;
+    ListNode* prev = nullptr;
+    ListNode* next = nullptr;
+    // 反转这里面的k个
+    // 原来的头就是尾巴，尾巴要指向下一层
+    // 原来的尾巴不用管，会变成上一层的连接点
+    for(int i{0}; i < k; ++i)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head->next = reverseKGroup(curr, k);
+    return prev;
+}
+
+ListNode* ReverseNodesinkGroup::ReverseNode(ListNode* head)
+{
+    // 自己写的，也过了，但有点丑
+#if 0
+    ListNode* pre = nullptr;
+    while(head != nullptr && head->next !=nullptr)
+    {
+        ListNode* temp = head->next;
+        ListNode* nx = head->next->next;
+        head->next = pre;
+        temp->next = head;
+        pre = temp;
+        head = nx;
+    }
+    if(head == nullptr) return pre;
+    else head->next = pre;
+    return head;
+#endif
+    ListNode* pre = nullptr;
+    ListNode* curr = head;
+    // 这里一次只变更当前node的next指向，我的一次变更了两个
+    // 所以也只需要判断curr是不是为空
+    while(curr != nullptr)
+    {
+        ListNode* temp = curr->next;
+        curr->next = pre;
+        pre = curr;
+        curr = temp;
+    }
+    return pre;
 }

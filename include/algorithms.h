@@ -417,3 +417,30 @@ public:
 
 };
 
+class MergeTwoSortedLists
+{
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2);
+};
+
+class MergekSortedLists
+{
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists);
+    ListNode* merge(ListNode* list1, ListNode* list2);
+};
+
+class SwapNodesinPairs
+{
+public:
+    ListNode* swapPairs(ListNode* head);
+};
+
+class ReverseNodesinkGroup
+{
+public:
+    ListNode* reverseKGroup(ListNode* head, int k);
+    ListNode* ReverseNode(ListNode* head);
+
+};
+
