@@ -1689,3 +1689,78 @@ ListNode* ReverseNodesinkGroup::ReverseNode(ListNode* head)
     }
     return pre;
 }
+
+/*--------------------------138--------------------------*/ // 没做出来
+Node* CopyListwithRandomPointer::copyRandomList(Node* head)
+{
+    if(head == nullptr) return nullptr;
+
+    // 和我脑袋里想的方式一样，构建hash来把元node与当前新node一个个对应
+    // 但是我没想到他真的会直接while循环两次
+    // 只能说我还是太懒了，两次while循环多的时间量没问题的
+    unordered_map<Node*, Node*> hash;
+    Node* dummy = head;
+    while(dummy != nullptr)
+    {
+        hash[dummy] = new Node(dummy->val);
+        dummy = dummy->next;
+    }
+    dummy = head;
+    while(dummy != nullptr)
+    {
+        hash[dummy]->next = hash[dummy->next];
+        hash[dummy]->random = hash[dummy->random];
+        dummy = dummy->next;
+    }
+    return hash[head];
+}
+
+/*--------------------------141--------------------------*/
+bool LinkedListCycle::hasCycle(ListNode *head)
+{
+    ListNode* slow = head;
+    ListNode* fast = head;
+    while(slow != nullptr && fast != nullptr)
+    {
+        slow = slow->next;
+        if(fast->next) fast = fast->next->next;
+        else return false;
+        if(slow == fast) return true;
+    }
+    return false;
+}
+
+/*--------------------------142--------------------------*/ //没做出来
+ListNode* LinkedListCycleII::detectCycle(ListNode *head)
+{
+    ListNode* slow = head;
+    ListNode* fast = head;
+    // 看公式计算
+    // BD相连
+    // A：头
+    // B：入口
+    // C: 相遇点
+    // D: 尾
+    // AB = n(BD) + CD
+    // 从A开始的，与从C开始，一起走AB的距离。
+    // A直接到达B点
+    // C绕环n圈后，继续到达C点，然后走CD到达B点 
+    while(fast != nullptr)
+    {
+        slow = slow->next;
+        if(fast->next == nullptr) return nullptr;
+        fast = fast->next->next;
+        // 第一次相遇后，从头开始到
+        if(slow == fast)
+        {
+            ListNode* p = head;
+            while(p != slow)
+            {
+                p = p->next;
+                slow = slow->next;
+            }
+            return p;
+        }
+    }
+    return nullptr;
+}
