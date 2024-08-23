@@ -5,7 +5,11 @@
 #include <unordered_set>
 #include <algorithm>
 #include <numeric>
+#include <list>
 
+// 1. 快排
+// 2. 归并排序
+// 3. 
 using namespace std;
 const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 struct TreeNode {
@@ -474,3 +478,33 @@ class LinkedListCycleII
 public:
     ListNode *detectCycle(ListNode *head);
 };
+
+class LRUCache
+{
+public:
+    int size{};
+    unordered_map<int, list<pair<int, int>>::iterator> m_map;
+    list<pair<int, int>> m_list;
+    LRUCache(int capacity);
+    int get(int key);
+    void put(int key, int value);
+};
+
+class SortList
+{
+public:
+    ListNode* sortList(ListNode* head);
+    ListNode* mergelist(ListNode *l1, ListNode *l2);   
+};
+
+class IntersectionofTwoLinkedLists
+{
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB);
+};
+
+class PalindromeLinkedList
+{
+public:
+    
+}

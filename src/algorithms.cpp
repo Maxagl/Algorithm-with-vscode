@@ -1764,3 +1764,130 @@ ListNode* LinkedListCycleII::detectCycle(ListNode *head)
     }
     return nullptr;
 }
+
+/*--------------------------146--------------------------*/ //没做出来
+LRUCache::LRUCache(int capacity): size(capacity)
+{
+
+}
+
+int LRUCache::get(int key)
+{
+    auto foundIter = m_map.find(key);
+    if(foundIter == m_map.end()) return -1;
+    // 把get过的插到最前面
+    // splice是把其他list的插入到当前list
+    // 按照官方的说明是换了接头
+    // 也就是说foundIter->second这个node，被拉出来接到m_list最前面去了
+    // foundIter没有任何变化，他的second也没有任何变化
+    // second这个指针的内容也没有任何变化
+    // 但是左右的链接发生了变化
+    m_list.splice(m_list.begin(), m_list, foundIter->second);
+    return foundIter->second->second;
+}
+void LRUCache::put(int key, int value)
+{
+    auto foundIter =m_map.find(key);
+    if(foundIter != m_map.end())
+    {
+        // 找得到的情况
+        m_list.splice(m_list.begin(), m_list, foundIter->second);
+        foundIter->second->second = value;
+        return;
+    }
+    if(m_map.size() == size)
+    {
+        // 找不到，并且满了，要删除
+        int key_to_del = m_list.back().first;
+        m_list.pop_back();
+        m_map.erase(key_to_del);
+    }
+    // 插入，list要插在最前面
+    // map只要更新就行
+    m_list.emplace_front(key, value);
+    m_map[key] = m_list.begin();
+}
+
+/*--------------------------148--------------------------*/ // 没做出来
+ListNode* SortList::sortList(ListNode* head)
+{
+    if(head == nullptr || head->next == nullptr)
+    {
+        return head;
+    }
+
+    ListNode* temp = nullptr;
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != nullptr && fast->next != nullptr)
+    {
+        temp = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // 把中间断开
+    temp->next = nullptr;
+    // 左半边
+    ListNode* l1 = sortList(head);
+    // 右半边
+    ListNode* l2 = sortList(slow);
+
+    // merge的第一次肯定是两个单独的节点或者一个为空
+    // 这里合并完了，返回他的头节点，然后继续合并
+    return mergelist(l1, l2);
+}
+ListNode* SortList::mergelist(ListNode *l1, ListNode *l2)
+{
+    ListNode* ptr = new ListNode(0);
+    ListNode *curr = ptr;
+    // 这里是合并两个排列好的list
+    // 所以要一直到nullptr
+    while(l1 != nullptr && l2 != nullptr)
+    {
+        if(l1->val <= l2->val)
+        {
+            curr->next = l1;
+            l1 = l1->next;
+        }
+        else
+        {
+            curr->next = l2;
+            l2 = l2->next;
+        }
+        curr = curr->next;
+    }
+    if(l1 != nullptr)
+    {
+        curr->next = l1;
+        l1 = l1->next;
+    }
+    if(l2 != nullptr)
+    {
+        curr->next = l2;
+        l2 = l2->next;
+    }
+    curr = ptr->next;
+    delete(ptr);
+    return curr;
+}
+
+/*--------------------------160--------------------------*/ //没做出来
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+{
+    ListNode* curr1 = headA;
+    ListNode* curr2 = headB;
+    while(curr1 != curr2)
+    {
+        // 相交肯定同时到相交点
+        // 不相交同时到nullptr
+        curr1 = curr1 == nullptr ? headB : curr1->next;
+        curr2 = curr2 == nullptr ? headA : curr2->next;
+    }
+    return curr1;
+}
+
+bool isPalindrome(ListNode* head)
+{
+    
+}
