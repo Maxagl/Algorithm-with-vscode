@@ -11,7 +11,7 @@
 // 2. 归并排序
 // 3. 
 using namespace std;
-const int DIR4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+const int DIR4[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 struct TreeNode {
      int val;
      TreeNode *left;
@@ -506,5 +506,35 @@ public:
 class PalindromeLinkedList
 {
 public:
-    
-}
+    bool isPalindrome(ListNode* head);
+};
+
+class RotateImage
+{
+public:
+    void rotate(vector<vector<int>>& matrix);
+};
+
+class SpiralMatrix
+{
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix);
+};
+
+class SetMatrixZeroes
+{
+public:
+    void setZeroes(vector<vector<int>>& matrix);
+};
+
+class SearchA2DMatrixII
+{
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target);
+};
+
+class LongestSubstringWithoutRepeatingCharacters
+{
+public:
+    int lengthOfLongestSubstring(string s);
+};

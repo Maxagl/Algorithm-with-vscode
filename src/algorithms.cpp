@@ -1887,7 +1887,172 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
     return curr1;
 }
 
-bool isPalindrome(ListNode* head)
+// 没做出来
+bool PalindromeLinkedList::isPalindrome(ListNode* head)
 {
-    
+    ListNode* slow = head;
+    ListNode* fast = head;
+    ListNode* prev;
+    ListNode* temp;
+    // 找到中点
+    while(fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // 记录中点
+    // 这个prev很精髓，奇数刚好为中点，偶数为中间点前一个的内容
+    // 1 2 3 4：11，24，跳出来
+    // 123：11，20，跳出来
+    prev = slow;
+    // 右半边
+    slow = slow->next;
+    // 左右两边断开
+    prev->next = nullptr;
+    // 翻转后半段
+    while(slow)
+    {
+        temp = slow->next;
+        // 第一次指向prev就会让他们指向中点或者，可以省一个变量
+        slow->next = prev;
+        prev = slow;
+        slow = temp;
+    }
+    // 反转完成，一个个比
+    fast = head;
+    slow = prev;
+    while(slow)
+    {
+        if(fast->val != slow->val) return false;
+        else
+        {
+            fast = fast->next;
+            slow = slow->next;
+        }
+    }
+    return true;
 }
+
+// 没做出来
+void RotateImage::rotate(vector<vector<int>>& matrix)
+{
+    int n = matrix.size();
+    int top{0};
+    int bottom{n - 1};
+    // 上下翻转
+    while(bottom >= top)
+    {
+        swap(matrix[top], matrix[bottom]);
+        ++top;
+        --bottom;
+    }
+    // 翻转对称位置
+    for(int i{0}; i < n; ++i)
+    {
+        for(int j{0}; j < i; ++j)
+        {
+            swap(matrix[i][j], matrix[j][i]);
+        }
+    }
+}
+
+// 没做出来
+vector<int> SpiralMatrix::spiralOrder(vector<vector<int>>& matrix)
+{
+    vector<int> ans{};
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int count = 0;
+    vector<vector<int>> visited(m, vector<int>(n, 0));
+    int i{0};
+    int j{0};
+    while(true)
+    {
+        if(ans.size() == m * n) break;
+        ans.push_back(matrix[i][j]);
+        visited[i][j] = 1;
+        int iNext = i + DIR4[count][0];
+        int jNext = j + DIR4[count][1];
+        if(iNext < 0 || iNext >= m || jNext < 0 || jNext >= n || visited[iNext][jNext] == 1)
+        {
+            ++count;
+            count %= 4;
+        }
+        i += DIR4[count][0];
+        j += DIR4[count][1];
+    }
+    return ans;    
+}
+
+/*--------------------------73--------------------------*/
+void SetMatrixZeroes::setZeroes(vector<vector<int>>& matrix)
+{
+    vector<int> rows;
+    vector<int> cols;
+    int m = matrix.size();
+    int n = matrix[0].size();
+    for(int i{0}; i < m; ++i)
+    {
+        for(int j{0}; j < n; ++j)
+        {
+            if(matrix[i][j] == 0)
+            {
+                rows.push_back(i);
+                cols.push_back(j);
+            }
+        }
+    }
+
+    for(auto row : rows)
+    {
+        for(int j{0}; j < n; ++j) matrix[row][j] = 0;
+    }
+    for(auto col : cols)
+    {
+        for(int i{0}; i < m; ++i) matrix[i][col] = 0;
+    }
+}
+
+/*--------------------------240--------------------------*/
+bool SearchA2DMatrixII::searchMatrix(vector<vector<int>>& matrix, int target)
+{
+    int x = 0;
+    int y = matrix[0].size() - 1;
+    while(x < matrix.size() && y >= 0)
+    {
+        if(matrix[x][y] == target) return true;
+        else if (matrix[x][y] > target) --y;
+        else ++x;
+    }
+    return false;
+}
+
+/*--------------------------3--------------------------*/
+int LongestSubstringWithoutRepeatingCharacters::lengthOfLongestSubstring(string s)
+{
+    int n = s.size();
+    if(n == 0) return 0;
+    int l = 0;
+    int r = 0;
+    int ans = 1;
+    unordered_map<char, int> hash;
+    for(r; r < n; ++r)
+    {
+        // 找到重复，需要去重
+        // 上次的l开始的所有值到重复值为止的都要erase
+        // 不然后面找到前面的会以为不能用，但其实没有重复
+        if(hash.count(s[r]))
+        {
+            for(int i{l}; i < hash[s[r]]; ++i) hash.erase(s[i]);
+            l = hash[s[r]] + 1;
+            
+        }
+        else 
+        {
+            ans = max(ans, r - l + 1);
+        }
+        hash[s[r]] = r;
+    }
+    return ans;  
+}
+
