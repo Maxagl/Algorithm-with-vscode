@@ -538,3 +538,21 @@ class LongestSubstringWithoutRepeatingCharacters
 public:
     int lengthOfLongestSubstring(string s);
 };
+
+class MinimumWindowSubstring
+{
+public:
+    string minWindow(string s, string t);
+};
+
+class SlidingWindowMaximum
+{
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k);
+};
+
+class FindAllAnagramsinaString
+{
+public:
+    vector<int> findAnagrams(string s, string p);    
+};

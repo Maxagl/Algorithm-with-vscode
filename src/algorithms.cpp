@@ -2056,3 +2056,107 @@ int LongestSubstringWithoutRepeatingCharacters::lengthOfLongestSubstring(string 
     return ans;  
 }
 
+/*--------------------------76--------------------------*/ //没做出来
+string MinimumWindowSubstring::minWindow(string s, string t)
+{
+    int m = s.size();
+    int n = t.size();
+    if(n > m) return "";
+    unordered_map<char, int> hasht{};
+    for(int i{0}; i < n; ++i)
+    {
+        ++hasht[t[i]];
+    }
+    int l{0};
+    int r{0};
+    int counter{n};
+    int minLen{INT_MAX};
+    int minStart{0};
+    while(r < m)
+    {
+        // 逆向思维，每次加一个就在hash里面减
+        // 当包含在t里面的值都被找到后，counter也被减了
+        // 不包含的就变成负值了，并且负了那么多个
+        if(hasht[s[r]] > 0) --counter;
+        --hasht[s[r]];
+        ++r;
+        while(counter == 0)
+        {
+            if(r - l < minLen)
+            {
+                minStart =l;
+                minLen = r - l;
+            }
+            // 相应的踢出去一个的时候，hash表就要把它加回来
+            ++hasht[s[l]];
+            // 如果是踢出去后大于0了，这个window肯定就不满足了，counter也要加
+            if(hasht[s[l]] > 0) ++counter;
+            // 在这个位置踢
+            ++l;
+        }
+    }
+    if(minLen != INT_MAX) return s.substr(minStart, minLen);
+    return "";
+}
+
+/*--------------------------239--------------------------*/ //没做出来
+vector<int> SlidingWindowMaximum::maxSlidingWindow(vector<int>& nums, int k)
+{
+    priority_queue<pair<int, int>> largeHeap{};
+    vector<int> ans{};
+    int n = nums.size();
+    for(int i{0}; i < k; ++i)
+    {
+        largeHeap.emplace(nums[i], i);
+    }
+    ans.push_back(largeHeap.top().first);
+
+    for(int i{k}; i < n; ++i)
+    {
+        // 一个个放进去
+        largeHeap.emplace(nums[i], i);
+        // 当top是当前滑动窗口以外的值时，就pop出去
+        // 其他小的不用管，因为我们只要找最大值
+        // 而这个索引的值就是i - x + 1 = k
+        // x = i - k + 1;
+        // 所以小于等于 i - k 的都要pop掉
+        while(largeHeap.top().second <= i - k)
+        {
+            largeHeap.pop();
+        }
+        ans.push_back(largeHeap.top().first);
+    }
+    return ans;
+}
+
+/*--------------------------438--------------------------*/ //没做出来
+vector<int> FindAllAnagramsinaString::findAnagrams(string s, string p)
+{
+    int s_len = s.size();
+    int p_len = p.size();
+
+    if(s.size() < p.size()) return {};
+    // vector当长度和元素都相等时可以比较
+    vector<int> freq_p(26, 0);
+    vector<int> window(26, 0);
+
+    for(int i{0}; i < p_len; ++i)
+    {
+        ++freq_p[p[i] - 'a'];
+        ++window[s[i] - 'a'];
+    }
+    vector<int> ans;
+    if(freq_p == window) ans.push_back(0);
+    for(int i = p_len; i < s_len; ++i)
+    {
+        // 当前i是要加进来的
+        // i加进来，证明i - p_len的那个要去掉
+        // i - x + 1 = p_len
+        // x = i - p_len + 1
+        // 要去掉x前面的值，i - p_len
+        --window[s[i - p_len] - 'a'];
+        ++window[s[i] - 'a'];
+        if(freq_p == window) ans.push_back(i - p_len + 1);
+    }
+    return ans;
+}
