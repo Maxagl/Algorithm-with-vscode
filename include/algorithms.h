@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <numeric>
 #include <list>
+#include <stack>
 
 // 1. 快排
 // 2. 归并排序
@@ -555,4 +556,16 @@ class FindAllAnagramsinaString
 {
 public:
     vector<int> findAnagrams(string s, string p);    
+};
+
+class ValidParentheses
+{
+public:
+    bool isValid(string s);
+};
+
+class LargestRectangleinHistogram
+{
+public:
+    int largestRectangleArea(vector<int>& heights);
 };

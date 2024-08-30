@@ -2160,3 +2160,54 @@ vector<int> FindAllAnagramsinaString::findAnagrams(string s, string p)
     }
     return ans;
 }
+
+/*--------------------------20--------------------------*/
+bool ValidParentheses::isValid(string s)
+{
+    unordered_map<char, char> hash{{']', '['}, {')', '('}, {'}', '{'}};
+    int n = s.size();
+    if(n <= 1) return false;
+    stack<char> s1{};
+    for(int i{0}; i < n; ++i)
+    {
+        if(s[i] == '(' || s[i] == '{' || s[i] == '[') s1.push(s[i]);
+        else
+        {
+            if(s1.size() == 0) return false;
+            if(s1.top() == hash[s[i]]) s1.pop();
+            else return false;
+        }
+    }
+    return s1.empty();
+}
+
+/*--------------------------84--------------------------*/ //没做出来
+int LargestRectangleinHistogram::largestRectangleArea(vector<int>& heights)
+{
+    vector<int> stk;
+    heights.insert(heights.begin(), 0);
+    heights.push_back(0);
+    int l{0};
+    int r{0};
+    int ans{0};
+    int n = heights.size();
+    for(int i{0}; i < n; ++i)
+    {
+        // 因为是单调递增栈，所以前面一个肯定比当前的要小
+        // 因为这个原因，l肯定是curr前面一个值对应的右边的第一个
+        // 而r就是当前的i
+        // 不懂的点：为什么这能保证所有的rectangle都找了
+        // 自己的解释：因为是单调递增栈，而且是逐一对里面的值进行取出
+        // 总是会先找到递增的部分，递减的bar肯定就是一根一根了，总之就是所有的bar都会遍历一次
+        while(!stk.empty() && heights[stk.back()] > heights[i])
+        {
+            int curr = stk.back();
+            stk.pop_back();
+            l = stk.back() + 1;
+            r = i - 1;
+            ans = max(ans, (r - l + 1) * heights[curr]);
+        }
+        stk.push_back(i);
+    }
+    return ans;
+}
