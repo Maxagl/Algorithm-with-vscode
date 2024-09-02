@@ -2211,3 +2211,66 @@ int LargestRectangleinHistogram::largestRectangleArea(vector<int>& heights)
     }
     return ans;
 }
+
+/*--------------------------155--------------------------*/ // 没写对
+
+MinStack::MinStack(){}
+void MinStack::push(int val)
+{
+    // 用iNT_MIN,好像会出错， 应该是为空取top了
+    // 其实当前的最大值直接用top来找就行，本身就是min stack
+    s1.push(val);
+    if(!s2.empty()) s2.push(min(s2.top(), val));
+    else s2.push(val); 
+}
+void MinStack::pop()
+{
+    s1.pop();
+}
+int MinStack::top()
+{
+    return s1.top();
+}
+int MinStack::getMin()
+{
+    return s2.top();
+}
+
+/*--------------------------394--------------------------*/ // 没写对
+string DecodeString::decodeString(string s)
+{
+    int i{0};
+    return dfs(s, i);
+}
+string DecodeString::dfs(const string& s, int& i)
+{
+    string res;
+    while(i < s.length() && s[i] != ']')
+    {
+        // 第一次递归开始肯定是数字或者字母
+        // 不是数字那就是res的string了
+        if(!isdigit(s[i])) res += s[i++];
+        else
+        {
+            // 数字
+            int n = 0;
+            while(i < s.length() && isdigit(s[i]))
+            {
+                n = n * 10 + s[i++] - '0';
+            }
+            // 数字结束
+            ++i;
+            // 可能内部又是数字起头，开始递归
+            string t = dfs(s, i);
+            // 递归出来是i == ']'，所以需要加1
+            ++i;
+
+            // 计算当前t所需要重复的次数
+            while(n-- > 0)
+            {
+                res += t;
+            }
+        }
+    }
+    return res;
+}

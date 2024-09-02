@@ -7,6 +7,7 @@
 #include <numeric>
 #include <list>
 #include <stack>
+#include <ctype.h>
 
 // 1. 快排
 // 2. 归并排序
@@ -568,4 +569,23 @@ class LargestRectangleinHistogram
 {
 public:
     int largestRectangleArea(vector<int>& heights);
+};
+
+class MinStack
+{
+public:
+    stack<int> s1;
+    stack<int> s2;
+    MinStack();
+    void push(int val);
+    void pop();
+    int top();
+    int getMin();
+};
+
+class DecodeString
+{
+public:
+    string decodeString(string s);
+    string dfs(const string& s, int& i);
 };
