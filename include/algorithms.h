@@ -589,3 +589,15 @@ public:
     string decodeString(string s);
     string dfs(const string& s, int& i);
 };
+
+class DailyTemperatures
+{
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures);
+};
+
+class ContainerWithMostWater
+{
+public:
+    int maxArea(vector<int>& height);
+};

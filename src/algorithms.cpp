@@ -2274,3 +2274,41 @@ string DecodeString::dfs(const string& s, int& i)
     }
     return res;
 }
+
+/*--------------------------739--------------------------*/ // 没做出来
+vector<int> dailyTemperatures(vector<int>& temperatures)
+{
+    int n = temperatures.size();
+    vector<int> nge(n, 0);
+    stack<int> st{};
+
+    // 倒过来是真没想到
+    for(int i{n - 1}; i >= 0; --i)
+    {
+        // 递减栈，关键点是理解可以一直pop的原因
+        // 因为top是最大值，所以如果当前的temp比top要大，那后面的都不可能比temp大，直接pop掉就行
+        while(!st.empty() && temperatures[st.top()] <= temperatures[i])
+        {
+            st.pop();
+        }
+        if(!st.empty()) nge[i] = st.top() - i;
+        st.push(i);
+    }
+    return nge;
+}
+
+int ContainerWithMostWater::maxArea(vector<int>& height)
+{
+    int n = height.size();
+    int l{0};
+    int r{n - 1};
+    int ans = (r - l) * min(height[l], height[r]);
+    while(r > l)
+    {
+        if(height[l] < height[r]) ++l;
+        else --r;
+        ans = max(ans, (r - l) * min(height[l], height[r]));
+    }
+    return ans;
+}
+
