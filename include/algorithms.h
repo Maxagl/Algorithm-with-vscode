@@ -8,6 +8,7 @@
 #include <list>
 #include <stack>
 #include <ctype.h>
+#include <algorithm>
 
 // 1. 快排
 // 2. 归并排序
@@ -600,4 +601,22 @@ class ContainerWithMostWater
 {
 public:
     int maxArea(vector<int>& height);
+};
+
+class ThreeSum
+{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums);
+};
+
+class TrappingRainWater
+{
+public:
+    int trap(vector<int>& height);
+};
+
+class MoveZeroes
+{
+public:
+    void moveZeroes(vector<int>& nums);
 };

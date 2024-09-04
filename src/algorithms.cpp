@@ -2297,6 +2297,7 @@ vector<int> dailyTemperatures(vector<int>& temperatures)
     return nge;
 }
 
+// 没做出来
 int ContainerWithMostWater::maxArea(vector<int>& height)
 {
     int n = height.size();
@@ -2310,5 +2311,74 @@ int ContainerWithMostWater::maxArea(vector<int>& height)
         ans = max(ans, (r - l) * min(height[l], height[r]));
     }
     return ans;
+}
+
+/*--------------------------15--------------------------*/ // 没做出来
+vector<vector<int>> threeSum(vector<int>& nums)
+{
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> ans{};
+    int n = nums.size();
+    for(int i{0}; i < n; ++i)
+    {
+        // 外围，第一个数去重
+        if(i > 0 && nums[i] == nums[i - 1]) continue;
+        int l = i + 1;
+        int r = n - 1;
+        if(nums[i] > 0) return ans;
+        int target = -nums[i];
+        while(r > l)
+        {
+            if(nums[l] + nums[r] > target) --r;
+            else if(nums[l] + nums[r] < target) ++l;
+            else
+            {
+                ans.push_back({nums[i], nums[l], nums[r]});
+                // 内部r，l去重
+                while(r > l && nums[l] == nums[l + 1]) ++l;
+                while(r > l && nums[r] == nums[r - 1]) --r;
+                // r和l还是原来的数，需要再各自往内部缩一位
+                ++l;
+                --r;
+            }
+        }
+    }
+}
+
+/*--------------------------42--------------------------*/ // 没做出来
+// 双指针的方法更简单，但是要用动态规划找最左边和最右边的最大值
+int TrappingRainWater::trap(vector<int>& height)
+{
+    int len = height.size();
+    stack<int> stk{};
+    int ans{0};
+    for(int i{0}; i < len; ++i)
+    {
+        // 递减栈
+        // 就算是多层的坑，也会从最底层开始
+        // 单调递减栈的一个性质就是，左边第一个比当前大的值
+        // 会一层层的把坑填完
+        while(!stk.empty() && height[i] > height[stk.top()])
+        {
+            int top = stk.top();
+            stk.pop();
+            if(stk.empty()) break;
+            // 当前底层对应的宽度
+            int w = i - stk.top() - 1;
+            // 高度就是当前相对于最低点的两个围栏中的短板，与最低点的差值
+            // 总共就两种情况，与最低点相邻的左边围栏小于的情况不可能早早的在前面被处理了
+            // 只能等于和大于
+            int h = min(height[stk.top()], height[i]) - height[top];
+            // 加进去
+            ans += w * h;
+        }
+        stk.push(i);
+    }
+    return ans;
+}
+
+void moveZeroes(vector<int>& nums)
+{
+    
 }
 
