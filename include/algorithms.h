@@ -620,3 +620,29 @@ class MoveZeroes
 public:
     void moveZeroes(vector<int>& nums);
 };
+
+class Trie
+{
+private:
+    vector<Trie*> children{};
+    bool isEnd{};
+    Trie* searchPrefix(string prefix);
+public:
+    Trie();
+    void insert(string word);
+    bool search(string word);
+    bool startsWith(string prefix);
+
+};
+
+class NextPermutation
+{
+public:
+    void nextPermutation(vector<int>& nums);
+};
+
+class FirstMissingPositive
+{
+public:
+    int firstMissingPositive(vector<int>& nums);
+};

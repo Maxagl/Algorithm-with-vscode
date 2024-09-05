@@ -2377,8 +2377,124 @@ int TrappingRainWater::trap(vector<int>& height)
     return ans;
 }
 
+// 283. Move Zeroes 没做出来这种方法
 void moveZeroes(vector<int>& nums)
 {
-    
+    int n = nums.size();
+    int index{0};
+    // 先把不等于0的一个个往前赋值形式排好
+    for(int i{0}; i < n; ++i)
+    {
+        if(nums[i] != 0) nums[index++] = nums[i];
+    }
+    // 后面的就都是0了
+    for(int j{index}; j < n; ++j)
+    {
+        nums[j] = 0;
+    }
 }
 
+/*--------------------------208--------------------------*/ // 没做出来
+Trie* Trie::searchPrefix(string prefix)
+{
+    Trie* node = this;
+    for(char ch : prefix)
+    {
+        // 直接去找第几个位置
+        ch -= 'a';
+        if(node->children[ch] == nullptr) return nullptr;
+        node = node->children[ch];
+    }
+    return node;
+}
+// 前缀树，有多少种可能，就有多少个孩子。每个孩子的存在就说明满足了
+// 需要确保是否为完整单词
+Trie::Trie() : children(26), isEnd(false){}
+void Trie::insert(string word)
+{
+    Trie* node = this;
+    // 对搜索的单词每一个进行查找，每一个就是一层
+    // 搜索完一个，找到了就进入了下一层
+    for(char ch : word)
+    {
+        ch -= 'a';
+        // 目前没有这个分支，要新建
+        if(node->children[ch] == nullptr) node->children[ch] = new Trie();
+        // 找到了， 进入下一层。上一层不重要了，所以也无需递归
+        node = node->children[ch];
+    }
+    // 所有的孩子整完了，把这一层标记
+    node->isEnd = true;
+}
+bool Trie::search(string word)
+{
+    Trie* node = this->searchPrefix(word);
+    return node != nullptr && node->isEnd;
+}
+bool Trie::startsWith(string prefix)
+{
+    return this->searchPrefix(prefix) != nullptr;
+}
+
+/*--------------------------31--------------------------*/ // 没做出来
+void NextPermutation::nextPermutation(vector<int>& nums)
+{
+    int rightMost{-1};
+    int n = nums.size();
+    // 这里是n-2,因为要加1
+    for(int i{n - 2}; i >= 0; --i)
+    {
+        if(nums[i + 1] > nums[i])
+        {
+            rightMost = i;
+            break;
+        }
+    }
+    if(rightMost == - 1) reverse(nums.begin(), nums.end());
+    else
+    {
+        // 这里是n-1，因为最后一个也要判断
+        for(int i{n - 1}; i > rightMost; --i)
+        {
+            if(nums[i] > nums[rightMost])
+            {
+                swap(nums[i], nums[rightMost]);
+                break;
+            }
+        }
+        reverse(nums.begin() + rightMost + 1, nums.end());
+    }
+}
+
+/*--------------------------41--------------------------*/ // 没做出来
+int FirstMissingPositive::firstMissingPositive(vector<int>& nums)
+{
+    int len = nums.size();
+    // 数组里面符合的值肯定都小于len + 1；
+    
+    // 先把负数全变为len + 1；
+    for(int i{0}; i < len; ++i)
+    {
+        if(nums[i] <= 0) nums[i] = len + 1;
+    }
+    // 把值，对应的索引标记为负数表示存在
+    for(int i{0}; i < len; ++i)
+    {
+        // 不能直接把num[i]变成绝对值
+        // num[i]可能已经被变成了负数一次
+        // 如果这里变num[i]就会反转了
+        // 相应的这里变成了负数，用他的时候要绝对值才行
+        int num = abs(nums[i]);
+        if(num <= len)
+        {
+            // 可能会有重复的，所以这里需要用abs
+            nums[num - 1] = -abs(nums[num - 1]);
+        }
+    }
+    // 第一个正数的位置就是答案
+    for(int i{0}; i < len; ++i)
+    {
+        if(nums[i] > 0) return i + 1;
+    }
+    return len + 1;
+}
