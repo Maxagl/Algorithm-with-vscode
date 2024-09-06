@@ -646,3 +646,21 @@ class FirstMissingPositive
 public:
     int firstMissingPositive(vector<int>& nums);
 };
+
+class MaximumSubarray
+{
+public:
+    int maxSubArray(vector<int>& nums);
+};
+
+class MergeIntervals
+{
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals);
+};
+
+class SortColors
+{
+public:
+    void sortColors(vector<int>& nums);
+};

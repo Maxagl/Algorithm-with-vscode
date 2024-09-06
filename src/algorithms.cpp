@@ -2498,3 +2498,77 @@ int FirstMissingPositive::firstMissingPositive(vector<int>& nums)
     }
     return len + 1;
 }
+
+
+/*--------------------------53--------------------------*/
+// 动态规划更简单
+// 以i结尾的最大序列
+// dp[i] = max(dp[i - 1] + nums[i], nums[i]);
+int MaximumSubarray::maxSubArray(vector<int>& nums)
+{
+    // 前缀和
+    int n = nums.size();
+    vector<int> preSum(n + 1, 0);
+    for(int i{1}; i <= n; ++i)
+    {
+        preSum[i] = preSum[i - 1] +  nums[i - 1];
+    }
+    // 最大股票交易收益
+    int minPre = preSum[0];
+    int ans{INT_MIN};
+    for(int i{1}; i <= n; ++i)
+    {
+        ans = max(ans, preSum[i] - minPre);
+        minPre = min(minPre, preSum[i]);
+    }
+    return ans;   
+}
+
+/*--------------------------56--------------------------*/
+vector<vector<int>> MergeIntervals::merge(vector<vector<int>>& intervals)
+{
+    vector<vector<int>> ans{};
+    sort(intervals.begin(), intervals.end());
+    int n = intervals.size();
+    ans.push_back(intervals[0]);
+    // 排列完之后，就只需要考虑后一个interval的末端对应前面的interval的情况
+    // 是在中间，还是在外面。
+
+    for(int i{1}; i < n; ++i)
+    {
+        vector<int> temp(2);
+        // 因为已经sort过了，所以intervals[i][0]肯定大于等于前面，不需要判断了
+        // 只需要判断头有没有超过尾
+        if(intervals[i][0] <= ans.back()[1])
+        {
+            ans.back()[1] = max(intervals[i][1], ans.back()[1]);
+        }
+        else
+        {
+            ans.push_back(intervals[i]);
+        }
+    }
+    return ans;
+}
+
+/*--------------------------56--------------------------*/ //想到了双指针，但没写出来
+void SortColors::sortColors(vector<int>& nums)
+{
+    int n = nums.size();
+    int p0{0};
+    int p2{n - 1};
+
+    for(int i{0}; i <= p2; ++i)
+    {
+        while(p2 >= i && nums[i] == 2)
+        {
+            swap(nums[i], nums[p2]);
+            --p2;
+        }
+        if(nums[i] == 0)
+        {
+            swap(nums[i], nums[p0]);
+            ++p0;
+        }
+    }
+}
