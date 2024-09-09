@@ -2555,6 +2555,9 @@ vector<vector<int>> MergeIntervals::merge(vector<vector<int>>& intervals)
 void SortColors::sortColors(vector<int>& nums)
 {
     int n = nums.size();
+    // 一个记录0的位置
+    // 一个记录2的位置
+    // 剩下的肯定都是1了
     int p0{0};
     int p2{n - 1};
 
@@ -2571,4 +2574,137 @@ void SortColors::sortColors(vector<int>& nums)
             ++p0;
         }
     }
+}
+
+/*--------------------------136--------------------------*/
+// 异或还有点印象
+int SingleNumber::singleNumber(vector<int>& nums)
+{
+    int ans{0};
+    for(int i{0}; i < nums.size(); ++i)
+    {
+        ans ^= nums[i];
+    }
+    return ans;
+}
+
+/*--------------------------169--------------------------*/
+// 下面的方法没做出来
+// 如果不相等就把count减1，全部遍历之后，留下的肯定是主要元素，只能直观理解，证明有点难
+int MajorityElement::majorityElement(vector<int>& nums)
+{
+    int candidate = 0;
+    int count = 0;
+    for(int i{0}; i < nums.size(); ++i)
+    {
+        if(count == 0)
+        {
+            candidate = nums[i];
+        }
+        else if(nums[i] == candidate) ++count;
+        else --count;
+    }
+    return candidate;
+}
+
+/*--------------------------189--------------------------*/ //没做出来，审题没有清楚
+void RotateArray::rotate(vector<int>& nums, int k)
+{
+    k = k % nums.size();
+    reverse(nums.begin(), nums.end());
+    reverse(nums.begin(), nums.begin() + k);
+    reverse(nums.begin() + k, nums.end());
+}
+
+/*--------------------------238--------------------------*/
+vector<int> ProductofArrayExceptSelf::productExceptSelf(vector<int>& nums)
+{
+    int n = nums.size();
+    vector<int> inorder(n + 1, 1);
+    vector<int> postorder(n + 1, 1);
+    vector<int> ans(n);
+    inorder[0] = 1;
+    postorder[0] = 1;
+    // 把位置理清楚
+    // inorder是前i个的乘积
+    // post是后i个的乘积
+    for(int i{1}; i <= n; ++i)
+    {
+        inorder[i] =  inorder[i - 1] * nums[i - 1];
+        postorder[i] = postorder[i - 1] * nums[n - i];
+    }
+    // 乘的时候要想清楚，是第几个
+    for(int i{0}; i < n; ++i)
+    {
+        ans[i] = inorder[i] * postorder[n - i - 1];
+    }
+    return ans;    
+}
+
+/*--------------------------238--------------------------*/ //没做出来
+// 因为只有一个数重复了，并且范围在1到n之间
+// 所以把值当成下一个索引，是可以在数组里面一直跳动的
+int FindtheDuplicateNumber::findDuplicate(vector<int>& nums)
+{
+    if(nums.size() > 1)
+    {
+        int slow = nums[0];
+        int fast = nums[nums[0]]; // 以当前值为索引
+        while(slow != fast)
+        {
+            slow = nums[slow];
+            fast = nums[nums[fast]]; // fast要走两步，所以里面再对fast进行取值
+        }
+        fast = 0;
+        // 因为必定有环
+        // 根据链表的环题，再一个个走一次，最后两者总会在出口出相遇
+        while(fast != slow)
+        {
+            fast = nums[fast];
+            slow = nums[slow];
+        }
+        return slow;
+    }
+    return -1;
+}
+
+vector<vector<string>> NQueens::solveNQueens(int n)
+{
+    std::vector<std::vector<std::string>> res;
+    std::vector<std::string> NQueens(n, std::string(n, '.'));
+    solveNQueens(res, NQueens, 0, n);
+    return res;
+}
+void NQueens::solveNQueens(std::vector<std::vector<std::string> > &res, std::vector<std::string> &nQueens, int row, int &n)
+{
+    if(row == n)
+    {
+        res.push_back(nQueens);
+        return;
+    }
+    for(int col = 0; col != n; ++col)
+    {
+        if(isValid(nQueens, row, col, n))
+        {
+            nQueens[row][col] = 'Q';
+            solveNQueens(res, nQueens, row + 1, n);
+            nQueens[row][col] = '.';
+        }
+    }
+}
+bool NQueens::isValid(std::vector<std::string> &nQueens, int row, int col, int &n)
+{
+    for(int i{0}; i != row; ++i)
+    {
+        if(nQueens[i][col] == 'Q') return false;
+    }
+    for(int i{row - 1}, j{col - 1}; i >= 0 && j >= 0; --i, --j)
+    {
+        if(nQueens[i][j] == 'Q') return false;
+    }
+    for(int i{row - 1}, j{col + 1}; i >= 0 && j < n; --i, ++j)
+    {
+        if(nQueens[i][j] == 'Q') return false;
+    }
+    return true;
 }

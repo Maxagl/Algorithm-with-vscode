@@ -664,3 +664,41 @@ class SortColors
 public:
     void sortColors(vector<int>& nums);
 };
+
+class SingleNumber
+{
+public:
+    int singleNumber(vector<int>& nums);
+};
+
+class MajorityElement
+{
+public:
+    int majorityElement(vector<int>& nums);
+};
+
+class RotateArray
+{
+public:
+    void rotate(vector<int>& nums, int k);
+};
+
+class ProductofArrayExceptSelf
+{
+public:
+    vector<int> productExceptSelf(vector<int>& nums);
+};
+
+class FindtheDuplicateNumber
+{
+public:
+    int findDuplicate(vector<int>& nums);
+};
+
+class NQueens
+{
+public:
+    vector<vector<string>> solveNQueens(int n);
+    void solveNQueens(std::vector<std::vector<std::string> > &res, std::vector<std::string> &nQueens, int row, int &n); 
+    bool isValid(std::vector<std::string> &nQueens, int row, int col, int &n);
+};
